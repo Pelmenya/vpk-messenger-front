@@ -69,7 +69,7 @@ export const RegisterForm: FC = () => {
       <InputField
         type="text"
         label="Имя в чате"
-        placeholder="Ввидите отображаемое имя"
+        placeholder="Введите отображаемое имя"
         register={register}
         name="displayName"
         error={errors.displayName?.message}
@@ -77,7 +77,7 @@ export const RegisterForm: FC = () => {
       <InputField
         type="password"
         label="Пароль"
-        placeholder="Ввведите пароль"
+        placeholder="Введите пароль"
         register={register}
         name="password"
         error={errors.password?.message}

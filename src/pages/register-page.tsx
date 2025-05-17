@@ -6,7 +6,7 @@ export const RegisterPage: FC = () => {
   return (
     <Layout>
       <div className="w-full h-full flex items-center justify-center">
-        <div className="min-w-md h-full pt-36">
+        <div className="min-w-md bg-base-100 rounded-2xl p-8">
           <RegisterForm />
         </div>
       </div>

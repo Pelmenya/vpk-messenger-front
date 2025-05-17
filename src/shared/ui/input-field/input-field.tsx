@@ -19,7 +19,7 @@ export const InputField = <T extends FieldValues>({
 }: TInputFieldProps<T>) => {
     return (
         <div className="w-full">
-            {label && <label htmlFor={name} className="block text-primary">{label}</label>}
+            {label && <label htmlFor={name} className="block text-primary text-xs mb-1">{label}</label>}
             <input
                 {...register(name)}
                 type={type}
