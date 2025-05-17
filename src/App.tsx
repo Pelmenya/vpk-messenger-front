@@ -1,64 +1,28 @@
-import "./App.css"
-import { Counter } from "./features/counter/Counter"
-import { Quotes } from "./features/quotes/Quotes"
-import logo from "./logo.svg"
+import { HashRouter, Navigate, Route, Routes } from "react-router-dom"
+import "./app.css"
+import { routes } from "./app/routing"
 
 export const App = () => (
   <div className="App">
-    <header className="App-header">
-      <img src={logo} className="App-logo" alt="logo" />
-      <Counter />
-      <p>
-        Edit <code>src/App.tsx</code> and save to reload.
-      </p>
-      <Quotes />
-      <span>
-        <span>Learn </span>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          React
-        </a>
-        <span>, </span>
-        <a
-          className="App-link"
-          href="https://redux.js.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Redux
-        </a>
-        <span>, </span>
-        <a
-          className="App-link"
-          href="https://redux-toolkit.js.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Redux Toolkit
-        </a>
-        <span>, </span>
-        <a
-          className="App-link"
-          href="https://react-redux.js.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          React Redux
-        </a>
-        ,<span> and </span>
-        <a
-          className="App-link"
-          href="https://reselect.js.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Reselect
-        </a>
-      </span>
-    </header>
+    <HashRouter>
+      <Routes>
+        {routes.map(route => (
+          <Route
+            key={route.path}
+            path={route.path}
+            element={<route.Component />}
+          >
+            {route.children?.map(child => (
+                <Route
+                  key={child.path}
+                  path={child.path}
+                  element={<child.Component />}
+                />
+              ))}
+          </Route>
+        ))}
+        <Route path="*" element={<Navigate to="/" />} />
+      </Routes>
+    </HashRouter>
   </div>
 )

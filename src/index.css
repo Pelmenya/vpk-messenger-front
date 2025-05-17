@@ -1,13 +1,11 @@
-body {
-  margin: 0;
-  font-family:
-    -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu",
-    "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+@import './app/fonts/fonts.css';
+@import "tailwindcss";
+
+@theme {
+  --font-sans: 'Montserrat', 'sans-serif';
+  --text-min: .75rem;
+  --text-ex-min: .625rem;
 }
 
-code {
-  font-family:
-    source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
-}
+@plugin "daisyui";
+
