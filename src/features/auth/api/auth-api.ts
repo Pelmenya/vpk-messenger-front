@@ -8,13 +8,10 @@ export const authApi = createApi({
     }),
 
     endpoints: (builder) => ({
-        postLogin: builder.mutation<{success: boolean}, string | undefined>({
-            query: (authKey) => ({
+        postLogin: builder.mutation<{success: boolean}, {}>({
+            query: () => ({
                 url: 'login',
                 method: 'POST',
-                headers: {
-                    Authorization: 'Bearer ' + String(authKey),
-                },
                 credentials: 'include'
             }),
         }),
