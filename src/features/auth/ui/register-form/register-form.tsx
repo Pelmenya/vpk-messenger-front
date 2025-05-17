@@ -60,21 +60,24 @@ export const RegisterForm: FC = () => {
     >
       <InputField
         type="text"
-        placeholder="Имя пользователя"
+        placeholder="Введите имя"
+        label="Имя"
         register={register}
         name="username"
         error={errors.username?.message}
       />
       <InputField
         type="text"
-        placeholder="Отображаемое имя"
+        label="Имя в чате"
+        placeholder="Ввидите отображаемое имя"
         register={register}
         name="displayName"
         error={errors.displayName?.message}
       />
       <InputField
         type="password"
-        placeholder="Пароль"
+        label="Пароль"
+        placeholder="Ввведите пароль"
         register={register}
         name="password"
         error={errors.password?.message}

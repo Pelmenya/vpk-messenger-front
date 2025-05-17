@@ -6,7 +6,7 @@ export const IndexPage: FC = () => {
   const navigate = useNavigate()
 
   const handleOnClickEnter = useCallback(() => {
-    void navigate("/register")
+    void navigate("/login")
   }, [navigate])
 
   useEffect(() => {

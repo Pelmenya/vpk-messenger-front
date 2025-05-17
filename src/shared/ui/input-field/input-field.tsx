@@ -18,15 +18,18 @@ export const InputField = <T extends FieldValues>({
     label,
 }: TInputFieldProps<T>) => {
     return (
-        <div className="w-full relative">
-            {label && <label className="block mb-2 text-primary">{label}</label>}
+        <div className="w-full">
+            {label && <label htmlFor={name} className="block text-primary">{label}</label>}
             <input
                 {...register(name)}
                 type={type}
+                id={name}
                 placeholder={placeholder}
                 className="input w-full input-primary"
             />
-            {error && <span className="absolute left-2 top-10 text-error text-min">{error}</span>}
+            <span className={`block max-w-md text-ex-min h-2 mt-1 ${error ? 'text-error' : 'text-transparent'}`}>
+                {error || ' '}
+            </span>
         </div>
     );
 };
