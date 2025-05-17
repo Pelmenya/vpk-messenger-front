@@ -1,7 +1,7 @@
 import type { ComponentType, JSX } from 'react';
 import { IndexPage } from '../pages/index-page';
 import { LoginPage } from '../pages/login-page/login-page';
-import { RegisterPage } from '../pages/register-page';
+import { RegisterPage } from '../pages/register-page/register-page';
 import { ChatPage } from '../pages/chat-page';
 
 export type Route = {
@@ -14,7 +14,7 @@ export type Route = {
 
 export const routes: Route[] = [
     { path: '/', Component: IndexPage },
-    { path: '/welcome-page', Component: ChatPage },
+    { path: '/chats', Component: ChatPage },
     { path: '/register', Component: RegisterPage },
     { path: '/login', Component: LoginPage },
 ];

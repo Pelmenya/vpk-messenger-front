@@ -3,7 +3,7 @@ import "./app.css"
 import { routes } from "./app/routing"
 
 export const App = () => (
-  <div className="App">
+  <div className="app">
     <HashRouter>
       <Routes>
         {routes.map(route => (

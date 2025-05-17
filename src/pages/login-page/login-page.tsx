@@ -1,11 +1,8 @@
 import type { FC } from "react"
-import "./general.css";
-import "./animations.css";
-import "./auth.css";
-import "./form.css";
 
 export const LoginPage: FC = () => {
   return (
+    <div></div>
   )
 }
 

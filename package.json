@@ -16,6 +16,7 @@
     "type-check": "tsc -b --noEmit"
   },
   "dependencies": {
+    "@hookform/resolvers": "5.0.1",
     "@reduxjs/toolkit": "2.6.1",
     "@tailwindcss/vite": "4.1.7",
     "daisyui": "5.0.35",

@@ -1,4 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { TRegister } from '../model/types/t-register';
 
 export const authApi = createApi({
     reducerPath: 'authApi',
@@ -17,17 +18,15 @@ export const authApi = createApi({
                 credentials: 'include'
             }),
         }),
-        postRegister: builder.mutation<{success: boolean}, { email: string; phone: string; authKey: string | undefined }>({
-            query: ({ email, phone, authKey }) => ({
+        postRegister: builder.mutation<{success: boolean}, TRegister>({
+            query: ({ username, password, displayName }) => ({
                 url: 'register',
-                method: 'PUT',
-                headers: {
-                    Authorization: 'Bearer ' + String(authKey),
-                },
+                method: 'POST',
                 credentials: 'include',
                 body: {
-                    email,
-                    phone,
+                    username,
+                    password,
+                    displayName,
                 },
             }),
         }),
