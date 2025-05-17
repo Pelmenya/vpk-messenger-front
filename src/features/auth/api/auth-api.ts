@@ -7,7 +7,6 @@ export const authApi = createApi({
     }),
 
     endpoints: (builder) => ({
-        // При первом заходе создаем юзера из ТГ
         postLogin: builder.mutation<{success: boolean}, string | undefined>({
             query: (authKey) => ({
                 url: 'login',
@@ -18,13 +17,12 @@ export const authApi = createApi({
                 credentials: 'include'
             }),
         }),
-        // Апдейтим юзера из ТГ с email и phone
         postRegister: builder.mutation<{success: boolean}, { email: string; phone: string; authKey: string | undefined }>({
             query: ({ email, phone, authKey }) => ({
                 url: 'register',
                 method: 'PUT',
                 headers: {
-                    Authorization: 'tma ' + String(authKey),
+                    Authorization: 'Bearer ' + String(authKey),
                 },
                 credentials: 'include',
                 body: {

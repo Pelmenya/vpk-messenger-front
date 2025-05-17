@@ -1,13 +1,20 @@
-import type { FC } from "react"
+import { useCallback, useEffect, type FC } from "react"
 import { Intro } from "../features/intro/ui/intro"
 import { useNavigate } from "react-router-dom"
 
 export const IndexPage: FC = () => {
   const navigate = useNavigate()
 
-  const handleOnClickEnter = () => {
+  const handleOnClickEnter = useCallback(() => {
     void navigate("/login")
-  }
+  }, [navigate])
+
+  useEffect(() => {
+    const timeoutId = setTimeout(handleOnClickEnter, 1000)
+    return () => {
+      clearTimeout(timeoutId)
+    }
+  }, [handleOnClickEnter])
 
   return (
     <Intro>
