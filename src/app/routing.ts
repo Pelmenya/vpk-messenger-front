@@ -1,7 +1,7 @@
 import type { ComponentType, JSX } from 'react';
 import { IndexPage } from '../pages/index-page';
 import { LoginPage } from '../pages/login-page/login-page';
-import { RegisterPage } from '../pages/register-page/register-page';
+import { RegisterPage } from '../pages/register-page';
 import { ChatPage } from '../pages/chat-page';
 
 export type Route = {
