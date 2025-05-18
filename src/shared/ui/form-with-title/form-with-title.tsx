@@ -1,5 +1,6 @@
 import type { FC, ReactNode } from "react"
 import { FormLink } from "../form-link/form-link"
+import { TNullable } from "../../types/t-nullable"
 
 export type TFormWithTitleProps = {
   title: string
@@ -13,6 +14,7 @@ export type TFormWithTitleProps = {
     text: string
     href: string
   }
+  error: TNullable<string>
 }
 
 export const FormWithTitle: FC<TFormWithTitleProps> = ({
@@ -23,6 +25,7 @@ export const FormWithTitle: FC<TFormWithTitleProps> = ({
   isLoading = false,
   isDisabledSubmitBtn = false,
   formLink,
+  error,
 }) => {
   return (
     <form
@@ -45,6 +48,11 @@ export const FormWithTitle: FC<TFormWithTitleProps> = ({
             <span>{submitButtonText}</span>
           )}
         </button>
+        <span
+          className={`block max-w-md text-ex-min h-2 ${error ? "text-error" : "text-transparent"}`}
+        >
+          {error || " "}
+        </span>
         {formLink && (
           <FormLink
             label={formLink.label}

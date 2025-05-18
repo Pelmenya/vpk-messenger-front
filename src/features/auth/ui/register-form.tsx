@@ -1,15 +1,18 @@
-import { useForm } from "react-hook-form"
-import { yupResolver } from "@hookform/resolvers/yup"
-import type { FC } from "react"
-import { usePostLoginMutation, usePostRegisterMutation } from "../api/auth-api"
-import { InputField } from "../../../shared/ui/input-field/input-field"
-import { FormWithTitle } from "../../../shared/ui/form-with-title/form-with-title"
-import { TRegister } from "../model/types/t-register"
-import { schemaRegister } from "../model/schemas/schema-register"
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useState, type FC } from "react";
+import { usePostLoginMutation, usePostRegisterMutation } from "../api/auth-api";
+import { InputField } from "../../../shared/ui/input-field/input-field";
+import { FormWithTitle } from "../../../shared/ui/form-with-title/form-with-title";
+import { TRegister } from "../model/types/t-register";
+import { schemaRegister } from "../model/schemas/schema-register";
+import { TNullable } from "../../../shared/types/t-nullable";
 
 export const RegisterForm: FC = () => {
-  const [postRegister] = usePostRegisterMutation() // Используем мутацию для регистрации пользователя
-  const [postLogin] = usePostLoginMutation() // Используем мутацию для логина пользователя в случае успешной регистрации
+  const [resError, setResError] = useState<TNullable<string>>(null);
+
+  const [postRegister] = usePostRegisterMutation(); 
+  const [postLogin] = usePostLoginMutation(); 
 
   const {
     register,
@@ -19,26 +22,32 @@ export const RegisterForm: FC = () => {
     resolver: yupResolver(schemaRegister),
     mode: "onChange",
     reValidateMode: "onChange",
-  })
+  });
 
   const onSubmit = async (data: TRegister) => {
+    setResError(null);
     try {
-      const resRegister = await postRegister(data)
-      if (resRegister?.data?.message === "Пользователь зарегистрирован.") {
+      // Попробуем выполнить регистрацию
+      const resRegister = await postRegister(data).unwrap();
+      
+      if (resRegister.message === "Пользователь зарегистрирован.") {
+        // Если регистрация успешна, выполняем логин
         const resLogin = await postLogin({
           username: data.username,
           password: data.password,
-        })
+        }).unwrap();
+
+        // Если логин успешен, можно выполнить навигацию
+        // navigate("/chats-page")
       }
-      console.log("User registered successfully", resRegister)
-      //navigate("/chats-page")
-    } catch (error) {
-      console.error("Error registering user:", error)
+    } catch (error: any) {
+      setResError(error.data?.message || "Произошла ошибка");
     }
-  }
+  };
 
   return (
     <FormWithTitle
+      error={resError}
       title="Регистрация"
       onSubmit={handleSubmit(onSubmit)}
       submitButtonText="Зарегистрироваться"
@@ -73,5 +82,5 @@ export const RegisterForm: FC = () => {
         error={errors.password?.message}
       />
     </FormWithTitle>
-  )
-}
+  );
+};

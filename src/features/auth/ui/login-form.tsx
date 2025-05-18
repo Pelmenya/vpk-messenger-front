@@ -1,15 +1,17 @@
-import { useForm } from "react-hook-form"
-import { yupResolver } from "@hookform/resolvers/yup"
-import type { FC } from "react"
-import { usePostLoginMutation } from "../api/auth-api"
-import { InputField } from "../../../shared/ui/input-field/input-field"
-import { FormWithTitle } from "../../../shared/ui/form-with-title/form-with-title"
-import { TRegister } from "../model/types/t-register"
-import { schemaLogin } from "../model/schemas/schema-login"
-
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useState, type FC } from "react";
+import { usePostLoginMutation } from "../api/auth-api";
+import { InputField } from "../../../shared/ui/input-field/input-field";
+import { FormWithTitle } from "../../../shared/ui/form-with-title/form-with-title";
+import { TRegister } from "../model/types/t-register";
+import { schemaLogin } from "../model/schemas/schema-login";
+import { TNullable } from "../../../shared/types/t-nullable";
 
 export const LoginForm: FC = () => {
-  const [postLogin] = usePostLoginMutation()
+  const [resError, setResError] = useState<TNullable<string>>(null);
+
+  const [postLogin] = usePostLoginMutation();
 
   const {
     register,
@@ -19,20 +21,22 @@ export const LoginForm: FC = () => {
     resolver: yupResolver(schemaLogin),
     mode: "onChange",
     reValidateMode: "onChange",
-  })
+  });
 
   const onSubmit = async (data: Omit<TRegister, "displayName">) => {
+    setResError(null);
     try {
-      const res = await postLogin(data)
-      console.log("User registered successfully", res)
-      //navigate("/chats-page")
-    } catch (error) {
-      console.error("Error registering user:", error)
+      const res = await postLogin(data).unwrap();
+      // Если логин успешен, можно выполнить навигацию
+      // navigate("/chats-page")
+    } catch (error: any) {
+      setResError(error.data?.message || "Произошла ошибка");
     }
-  }
+  };
 
   return (
     <FormWithTitle
+      error={resError}
       title="Вход"
       onSubmit={handleSubmit(onSubmit)}
       submitButtonText="Войти"
@@ -59,5 +63,5 @@ export const LoginForm: FC = () => {
         error={errors.password?.message}
       />
     </FormWithTitle>
-  )
+  );
 }
