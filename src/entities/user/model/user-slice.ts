@@ -20,11 +20,20 @@ export const userSlice = createSlice({
   reducers: {
     setUser(state, action: PayloadAction<TUser>) {
       state.user = action.payload;
+      localStorage.setItem('user', JSON.stringify(state));
     },
     clearUser(state) {
       state.user = null;
+      localStorage.removeItem('user');
+    },
+    loadUserFromStorage(state) {
+      const storedUser = localStorage.getItem('user');
+      if (storedUser) {
+        const userData: TUserState = JSON.parse(storedUser);
+        state.user = userData.user;
+      }
     },
   },
 });
 
-export const { setUser, clearUser } = userSlice.actions;
+export const { setUser, clearUser, loadUserFromStorage } = userSlice.actions;

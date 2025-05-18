@@ -4,7 +4,7 @@ export const menuLinksLogout: TMenuLinkProps[] = [
     {
         id: '1',
         href: '/login',
-        text: 'enter',
+        text: 'Войти',
         type: 'login',
     },
 ]
@@ -13,13 +13,13 @@ export const menuLinksLogin: TMenuLinkProps[] = [
     {
         id: '2',
         href: '/profile',
-        text: 'profile',
+        text: 'Профиль',
         type: 'profile',
     },
     {
         id: '3',
         href: '/',
-        text: 'exit',
+        text: 'Выйти',
         type: 'logout'
     },
 ]

@@ -1,31 +1,32 @@
 // main.tsx
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import { Provider } from 'react-redux';
-import { store } from './app/store';
-import { BrowserRouter } from 'react-router-dom';
-import { App } from './app';
-import './index.css';
-import { loadAuthFromStorage } from './features/auth/model/auth-slice';
+import React from "react"
+import ReactDOM from "react-dom/client"
+import { Provider } from "react-redux"
+import { store } from "./app/store"
+import { BrowserRouter } from "react-router-dom"
+import { App } from "./app"
+import { AuthProvider } from "./app/auth-provider"
 
-// Загружаем состояние аутентификации из localStorage
-store.dispatch(loadAuthFromStorage());
+import "./index.css"
+
 // Получаем контейнер для рендеринга приложения
-const container = document.getElementById('root');
+const container = document.getElementById("root")
 
 if (container) {
-  const root = ReactDOM.createRoot(container);
+  const root = ReactDOM.createRoot(container)
   root.render(
     <React.StrictMode>
       <Provider store={store}>
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
+        <AuthProvider>
+          <BrowserRouter>
+            <App />
+          </BrowserRouter>
+        </AuthProvider>
       </Provider>
     </React.StrictMode>,
-  );
+  )
 } else {
   throw new Error(
     "Root element with ID 'root' was not found in the document. Ensure there is a corresponding HTML element with the ID 'root' in your HTML file.",
-  );
+  )
 }

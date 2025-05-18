@@ -4,8 +4,13 @@ import { menuLinksLogin, menuLinksLogout } from "./constants"
 import { TUser } from "../../../../entities/user/model/user.entity"
 import { ProfileIcon } from "../../../../shared/ui/icons/profile-icon"
 import { MenuLink } from "./components/menu-link"
+import { useAppDispatch } from "../../../../app/hooks"
+import { logout } from "../../model/auth-slice"
+import { clearUser } from "../../../../entities/user/model/user-slice"
 
 export const MenuDropdown: FC<{ user: TUser }> = ({ user }) => {
+  const dispatch = useAppDispatch()
+
   return (
     <Menu as="div" className="relative inline-block text-left">
       <MenuButton
@@ -40,8 +45,10 @@ export const MenuDropdown: FC<{ user: TUser }> = ({ user }) => {
       >
         <MenuItems
           as="ul"
-          className="absolute z-50 right-0 mt-2 menu p-2 drop-shadow-[0_10px_10px_rgba(0,0,0,0.2)] bg-base-100 rounded-box w-52"
+          className="absolute z-50 right-0 mt-2 menu p-2 shadow-xl bg-base-100 rounded-box w-52 outline-none ring-0"
+          style={{ border: "none" }}
         >
+          {" "}
           {user
             ? menuLinksLogin.map(link => (
                 <MenuLink
@@ -49,7 +56,14 @@ export const MenuDropdown: FC<{ user: TUser }> = ({ user }) => {
                   href={link.href}
                   text={link.text}
                   type={link.type}
-                  onClick={link.type === "logout" ? async () => {} : undefined}
+                  onClick={
+                    link.type === "logout"
+                      ? async () => {
+                          dispatch(logout())
+                          dispatch(clearUser())
+                        }
+                      : undefined
+                  }
                 />
               ))
             : menuLinksLogout.map(link => (
