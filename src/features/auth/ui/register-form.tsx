@@ -2,7 +2,7 @@ import { useForm } from "react-hook-form"
 import * as yup from "yup"
 import { yupResolver } from "@hookform/resolvers/yup"
 import type { FC } from "react"
-import { usePostRegisterMutation } from "../api/auth-api"
+import { usePostLoginMutation, usePostRegisterMutation } from "../api/auth-api"
 import { InputField } from "../../../shared/ui/input-field/input-field"
 import { FormWithTitle } from "../../../shared/ui/form-with-title/form-with-title"
 import { TRegister } from "../model/types/t-register"
@@ -20,18 +20,24 @@ const schema = yup.object().shape({
     .required("Отображаемое имя обязательно"),
   password: yup
     .string()
-    .matches(/^[A-Za-z0-9@$!%*?&#]+$/, "Пароль содержит недопустимые символы. Разрешены только цифры, латинские буквы и спецсимволы @$!%*?&#")
+    .matches(
+      /^[A-Za-z0-9@$!%*?&#]+$/,
+      "Пароль содержит недопустимые символы. Разрешены только цифры, латинские буквы и спецсимволы @$!%*?&#",
+    )
     .min(8, "Пароль должен быть не короче 8 символов")
     .matches(/[A-Z]/, "Пароль должен содержать хотя бы одну заглавную букву")
     .matches(/[a-z]/, "Пароль должен содержать хотя бы одну строчную букву")
     .matches(/[0-9]/, "Пароль должен содержать хотя бы одну цифру")
-    .matches(/[@$!%*?&#]/, "Пароль должен содержать хотя бы один из спецсимволов @$!%*?&#")
+    .matches(
+      /[@$!%*?&#]/,
+      "Пароль должен содержать хотя бы один из спецсимволов @$!%*?&#",
+    )
     .required("Пароль обязателен"),
 })
 
-
 export const RegisterForm: FC = () => {
   const [postRegister] = usePostRegisterMutation() // Используем мутацию для регистрации пользователя
+  const [postLogin] = usePostLoginMutation() // Используем мутацию для логина пользователя в случае успешной регистрации
 
   const {
     register,
@@ -45,7 +51,15 @@ export const RegisterForm: FC = () => {
 
   const onSubmit = async (data: TRegister) => {
     try {
-      const res = await postRegister(data)
+      const resRegister = await postRegister(data)
+      if (resRegister?.data?.message === "Пользователь зарегистрирован.") {
+        const resLogin = await postLogin({
+          username: data.username,
+          password: data.password,
+        })
+
+        
+      }
       console.log("User registered successfully", res)
       //navigate("/chats-page")
     } catch (error) {

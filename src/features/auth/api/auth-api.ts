@@ -8,14 +8,19 @@ export const authApi = createApi({
     }),
 
     endpoints: (builder) => ({
-        postLogin: builder.mutation<{success: boolean}, {}>({
-            query: () => ({
+        postLogin: builder.mutation<{ success: boolean }, Omit<TRegister, 'displayName'>>({
+            query: ({ username, password }) => ({
                 url: 'login',
                 method: 'POST',
-                credentials: 'include'
+                credentials: 'include',
+                body: {
+                    username,
+                    password,
+                },
+
             }),
         }),
-        postRegister: builder.mutation<{success: boolean}, TRegister>({
+        postRegister: builder.mutation<{ message: 'Пользователь зарегистрирован.' }, TRegister>({
             query: ({ username, password, displayName }) => ({
                 url: 'register',
                 method: 'POST',

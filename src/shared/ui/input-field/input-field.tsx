@@ -26,6 +26,7 @@ export const InputField = <T extends FieldValues>({
                 id={name}
                 placeholder={placeholder}
                 className="input w-full input-primary"
+                autoComplete="current-password"
             />
             <span className={`block max-w-md text-ex-min h-2 mt-1 ${error ? 'text-error' : 'text-transparent'}`}>
                 {error || ' '}
