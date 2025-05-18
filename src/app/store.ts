@@ -1,12 +1,14 @@
 import { configureStore, Middleware, type Action, type ThunkAction } from "@reduxjs/toolkit"
 import { authApi } from "../features/auth/api/auth-api"
 import logger from 'redux-logger'
+import { userSlice } from "../entities/user/model/user-slice";
 
 const isDev = process.env.NODE_ENV === 'development';
 
 export const store = configureStore({
     reducer: {
         [authApi.reducerPath]: authApi.reducer,
+        [userSlice.reducerPath]: userSlice.reducer,
     },
     middleware: (getDefaultMiddleware) => {
         const middlewares = getDefaultMiddleware().concat(
