@@ -1,39 +1,11 @@
 import { useForm } from "react-hook-form"
-import * as yup from "yup"
 import { yupResolver } from "@hookform/resolvers/yup"
 import type { FC } from "react"
 import { usePostLoginMutation, usePostRegisterMutation } from "../api/auth-api"
 import { InputField } from "../../../shared/ui/input-field/input-field"
 import { FormWithTitle } from "../../../shared/ui/form-with-title/form-with-title"
 import { TRegister } from "../model/types/t-register"
-
-const schema = yup.object().shape({
-  username: yup
-    .string()
-    .min(3, "Имя должно содержать не менее 3 символов")
-    .max(20, "Имя не должно превышать 20 символов")
-    .required("Имя обязательно"),
-  displayName: yup
-    .string()
-    .min(3, "Отображаемое имя должно содержать не менее 3 символов")
-    .max(20, "Отображаемое имя не должно превышать 20 символов")
-    .required("Отображаемое имя обязательно"),
-  password: yup
-    .string()
-    .matches(
-      /^[A-Za-z0-9@$!%*?&#]+$/,
-      "Пароль содержит недопустимые символы. Разрешены только цифры, латинские буквы и спецсимволы @$!%*?&#",
-    )
-    .min(8, "Пароль должен быть не короче 8 символов")
-    .matches(/[A-Z]/, "Пароль должен содержать хотя бы одну заглавную букву")
-    .matches(/[a-z]/, "Пароль должен содержать хотя бы одну строчную букву")
-    .matches(/[0-9]/, "Пароль должен содержать хотя бы одну цифру")
-    .matches(
-      /[@$!%*?&#]/,
-      "Пароль должен содержать хотя бы один из спецсимволов @$!%*?&#",
-    )
-    .required("Пароль обязателен"),
-})
+import { schemaRegister } from "../model/schemas/schema-register"
 
 export const RegisterForm: FC = () => {
   const [postRegister] = usePostRegisterMutation() // Используем мутацию для регистрации пользователя
@@ -44,7 +16,7 @@ export const RegisterForm: FC = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<TRegister>({
-    resolver: yupResolver(schema),
+    resolver: yupResolver(schemaRegister),
     mode: "onChange",
     reValidateMode: "onChange",
   })
@@ -57,10 +29,8 @@ export const RegisterForm: FC = () => {
           username: data.username,
           password: data.password,
         })
-
-        
       }
-      console.log("User registered successfully", res)
+      console.log("User registered successfully", resRegister)
       //navigate("/chats-page")
     } catch (error) {
       console.error("Error registering user:", error)

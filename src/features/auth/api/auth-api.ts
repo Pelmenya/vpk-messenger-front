@@ -1,5 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { TRegister } from '../model/types/t-register';
+import { TUserState } from '../../../entities/user/model/user-slice';
 
 export const authApi = createApi({
     reducerPath: 'authApi',
@@ -8,7 +9,7 @@ export const authApi = createApi({
     }),
 
     endpoints: (builder) => ({
-        postLogin: builder.mutation<{ success: boolean }, Omit<TRegister, 'displayName'>>({
+        postLogin: builder.mutation<TUserState, Omit<TRegister, 'displayName'>>({
             query: ({ username, password }) => ({
                 url: 'login',
                 method: 'POST',
