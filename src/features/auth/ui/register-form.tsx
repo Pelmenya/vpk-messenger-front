@@ -2,10 +2,10 @@ import { useForm } from "react-hook-form"
 import * as yup from "yup"
 import { yupResolver } from "@hookform/resolvers/yup"
 import type { FC } from "react"
-import { usePostRegisterMutation } from "../../api/auth-api"
-import { InputField } from "../../../../shared/ui/input-field/input-field"
-import { FormWithTitle } from "../../../../shared/ui/form-with-title/form-with-title"
-import { TRegister } from "../../model/types/t-register"
+import { usePostRegisterMutation } from "../api/auth-api"
+import { InputField } from "../../../shared/ui/input-field/input-field"
+import { FormWithTitle } from "../../../shared/ui/form-with-title/form-with-title"
+import { TRegister } from "../model/types/t-register"
 
 const schema = yup.object().shape({
   username: yup
@@ -24,12 +24,14 @@ const schema = yup.object().shape({
     .matches(/[A-Z]/, "Пароль должен содержать хотя бы одну заглавную букву")
     .matches(/[a-z]/, "Пароль должен содержать хотя бы одну строчную букву")
     .matches(/[0-9]/, "Пароль должен содержать хотя бы одну цифру")
-    .matches(/[@$!%*?&#]/, "Пароль должен содержать хотя бы один специальный символ @$!%*?&#")
+    .matches(
+      /[@$!%*?&#]/,
+      "Пароль должен содержать хотя бы один специальный символ @$!%*?&#",
+    )
     .required("Пароль обязателен"),
 })
 
 export const RegisterForm: FC = () => {
-
   const [postRegister] = usePostRegisterMutation() // Используем мутацию для регистрации пользователя
 
   const {
@@ -38,8 +40,8 @@ export const RegisterForm: FC = () => {
     formState: { errors },
   } = useForm<TRegister>({
     resolver: yupResolver(schema),
-    mode: 'onChange',
-    reValidateMode: 'onChange',
+    mode: "onChange",
+    reValidateMode: "onChange",
   })
 
   const onSubmit = async (data: TRegister) => {
@@ -57,6 +59,11 @@ export const RegisterForm: FC = () => {
       title="Регистрация"
       onSubmit={handleSubmit(onSubmit)}
       submitButtonText="Зарегистрироваться"
+      formLink={{
+        label: "Уже зарегистрированы?",
+        href: "/login",
+        text: "Войти",
+      }}
     >
       <InputField
         type="text"

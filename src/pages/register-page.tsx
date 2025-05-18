@@ -1,15 +1,14 @@
 import type { FC } from "react"
-import { RegisterForm } from "../features/auth/ui/register-form/register-form"
+import { RegisterForm } from "../features/auth/ui/register-form"
 import { Layout } from "../shared/ui/layout/layout"
+import { FormWrapper } from "../shared/ui/form-wrapper/from-wrapper"
 
 export const RegisterPage: FC = () => {
   return (
     <Layout>
-      <div className="w-full h-full flex items-center justify-center">
-        <div className="min-w-md bg-base-100 rounded-2xl p-8">
-          <RegisterForm />
-        </div>
-      </div>
+      <FormWrapper>
+        <RegisterForm />
+      </FormWrapper>
     </Layout>
   )
 }

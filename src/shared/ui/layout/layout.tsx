@@ -7,7 +7,7 @@ export const Layout: FC<{ children: ReactNode }> = ({ children }) => {
       <header className="flex justify-end w-full py-8 px-12 bg-transparent fixed">
         <ThemeToggle />
       </header>
-      <main className="h-full w-full">
+      <main className="h-full w-full flex items-center justify-center">
         {children}
         </main>
     </div>

@@ -10,20 +10,20 @@ export const IndexPage: FC = () => {
     void navigate("/register")
   }, [navigate])
 
-/*   useEffect(() => {
+  useEffect(() => {
     const timeoutId = setTimeout(handleOnClickEnter, 10000)
     return () => {
       clearTimeout(timeoutId)
     }
-  }, [handleOnClickEnter]) */
+  }, [handleOnClickEnter])
 
   return (
     <Layout>
       <Intro>
         <div className="flex flex-col items-center gap-8 mb-20">
-          <h1 className="text-7xl font-bold text-neutral-content text-center">
-            Добро пожаловать <br />в Чат ВПК
-          </h1>
+            <h1 className="text-7xl font-bold text-neutral-content text-center">
+              Добро пожаловать <br />в Чат ВПК
+            </h1>
           <button
             onClick={handleOnClickEnter}
             className="btn btn-primary btn-lg max-w-64"
