@@ -12,7 +12,7 @@ export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
     dispatch(loadAuthFromStorage())
     // Загружаем состояние user из localStorage
     dispatch(loadUserFromStorage())
-  }, [dispatch, loadAuthFromStorage])
+  }, [dispatch, loadAuthFromStorage, loadUserFromStorage])
 
   return <>{children}</>
 }

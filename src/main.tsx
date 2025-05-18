@@ -5,7 +5,6 @@ import { Provider } from "react-redux"
 import { store } from "./app/store"
 import { BrowserRouter } from "react-router-dom"
 import { App } from "./app"
-import { AuthProvider } from "./app/auth-provider"
 
 import "./index.css"
 
@@ -17,11 +16,9 @@ if (container) {
   root.render(
     <React.StrictMode>
       <Provider store={store}>
-        <AuthProvider>
           <BrowserRouter>
             <App />
           </BrowserRouter>
-        </AuthProvider>
       </Provider>
     </React.StrictMode>,
   )

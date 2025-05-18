@@ -13,7 +13,7 @@ export const ChatPage = () => {
 
   return (
     <Layout>
-      <div className="h-screen flex flex-col items-center justify-center bg-base-100">
+      <div className="w-full h-full max-w-7xl flex flex-col items-center justify-center bg-base-100">
         <h1 className="text-3xl font-bold mb-4">Добро пожаловать в чат!</h1>
         <button className="btn btn-primary" onClick={handleLogout}>
           Выйти
