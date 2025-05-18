@@ -2,12 +2,14 @@ import { configureStore, Middleware, type Action, type ThunkAction } from "@redu
 import { authApi } from "../features/auth/api/auth-api"
 import logger from 'redux-logger'
 import { userSlice } from "../entities/user/model/user-slice";
+import { authSlice } from "../features/auth/model/auth-slice";
 
 const isDev = process.env.NODE_ENV === 'development';
 
 export const store = configureStore({
     reducer: {
         [authApi.reducerPath]: authApi.reducer,
+        [authSlice.reducerPath]: authSlice.reducer,
         [userSlice.reducerPath]: userSlice.reducer,
     },
     middleware: (getDefaultMiddleware) => {
