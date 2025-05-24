@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom"
 import { ReactNode } from "react"
-import { ProfileIcon } from "../../../../../shared/ui/icons/profile-icon"
-import { LogoutIcon } from "../../../../../shared/ui/icons/logout-icon"
-import { LoginIcon } from "../../../../../shared/ui/icons/login-icon"
+import { LoginIcon } from "@/shared/ui/icons/login-icon"
+import { ProfileIcon } from "@/shared/ui/icons/profile-icon"
+import { LogoutIcon } from "@/shared/ui/icons/logout-icon"
 
 export type TMenuLinkProps = Partial<{
   children: ReactNode

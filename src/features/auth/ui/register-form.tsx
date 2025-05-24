@@ -1,15 +1,15 @@
 import { useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
 import { useState, type FC } from "react"
+import { useAppDispatch } from "@/app/hooks"
+import { TNullable } from "@/shared/types/t-nullable"
 import { usePostLoginMutation, usePostRegisterMutation } from "../api/auth-api"
-import { InputField } from "../../../shared/ui/input-field/input-field"
-import { FormWithTitle } from "../../../shared/ui/form-with-title/form-with-title"
 import { TRegister } from "../model/types/t-register"
-import { schemaRegister } from "../model/schemas/schema-register"
-import { TNullable } from "../../../shared/types/t-nullable"
-import { useAppDispatch } from "../../../app/hooks"
-import { setUser } from "../../../entities/user/model/user-slice"
+import { setUser } from "@/entities/user/model/user-slice"
 import { login } from "../model/auth-slice"
+import { FormWithTitle } from "@/shared/ui/form-with-title/form-with-title"
+import { InputField } from "@/shared/ui/input-field/input-field"
+import { schemaRegister } from "../model/schemas/schema-register"
 
 export const RegisterForm: FC = () => {
   const dispatch = useAppDispatch()

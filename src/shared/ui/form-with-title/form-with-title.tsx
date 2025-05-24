@@ -1,6 +1,6 @@
+import { TNullable } from "@/shared/types/t-nullable"
 import type { FC, ReactNode } from "react"
 import { FormLink } from "../form-link/form-link"
-import { TNullable } from "../../types/t-nullable"
 
 export type TFormWithTitleProps = {
   title: string

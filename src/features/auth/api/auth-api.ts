@@ -1,6 +1,6 @@
+import { TUserState } from '@/entities/user/model/user-slice';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { TRegister } from '../model/types/t-register';
-import { TUserState } from '../../../entities/user/model/user-slice';
 
 type RegisterResponse = {
     message: string;

@@ -1,7 +1,7 @@
+import { MoonIcon } from '@/shared/ui/icons/moon-icon';
+import { SunIcon } from '@/shared/ui/icons/sun-icon';
 import { useEffect, useState, useCallback } from 'react';
 import { themeChange } from 'theme-change';
-import { SunIcon } from '../icons/sun-icon';
-import { MoonIcon } from '../icons/moon-icon';
 
 export const ThemeToggle = () => {
     const [isChecked, setIsChecked] = useState<boolean>(() => {
