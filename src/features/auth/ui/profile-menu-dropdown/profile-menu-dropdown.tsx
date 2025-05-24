@@ -8,7 +8,7 @@ import { useAppDispatch } from "../../../../app/hooks"
 import { logout } from "../../model/auth-slice"
 import { clearUser } from "../../../../entities/user/model/user-slice"
 
-export const MenuDropdown: FC<{ user: TUser }> = ({ user }) => {
+export const ProfileMenuDropdown: FC<{ user: TUser }> = ({ user }) => {
   const dispatch = useAppDispatch()
 
   return (
