@@ -3,18 +3,21 @@ import { authApi } from "../features/auth/api/auth-api"
 import logger from 'redux-logger'
 import { userSlice } from "../entities/user/model/user-slice";
 import { authSlice } from "../features/auth/model/auth-slice";
+import { chatApi } from "@/entities/chat/api/chat-api";
 
 const isDev = process.env.NODE_ENV === 'development';
 
 export const store = configureStore({
     reducer: {
         [authApi.reducerPath]: authApi.reducer,
+        [chatApi.reducerPath]: chatApi.reducer,
         [authSlice.reducerPath]: authSlice.reducer,
         [userSlice.reducerPath]: userSlice.reducer,
     },
     middleware: (getDefaultMiddleware) => {
         const middlewares = getDefaultMiddleware().concat(
             authApi.middleware,
+            chatApi.middleware,
         );
 
         if (isDev) {
