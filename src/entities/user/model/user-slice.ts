@@ -1,6 +1,6 @@
 // userSlice.ts
+import { TNullable } from '@/shared/types/t-nullable';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { TNullable } from '../../../shared/types/t-nullable';
 import { TUser } from './user.entity';
 
 // Определяем тип для состояния пользователя

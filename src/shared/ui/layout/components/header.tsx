@@ -1,8 +1,8 @@
+import { FC, ReactNode } from "react"
 import { useAppSelector } from "@/app/hooks"
 import { getUser } from "@/entities/user/model/user-selectors"
 import { ProfileMenuDropdown } from "@/features/auth/ui/profile-menu-dropdown/profile-menu-dropdown"
 import { ThemeToggle } from "@/widgets/theme-toggle/theme-toggle"
-import { FC, ReactNode } from "react"
 
 export const Header: FC<{ children?: ReactNode }> = () => {
   const user = useAppSelector(getUser)

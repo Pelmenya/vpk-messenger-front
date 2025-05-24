@@ -1,6 +1,6 @@
 // authSlice.ts
+import { TNullable } from '@/shared/types/t-nullable';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { TNullable } from '../../../shared/types/t-nullable';
 
 // Определяем тип для состояния аутентификации
 type TAuthState = {

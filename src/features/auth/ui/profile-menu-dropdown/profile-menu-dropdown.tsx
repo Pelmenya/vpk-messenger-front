@@ -1,12 +1,12 @@
+import { useAppDispatch } from "@/app/hooks"
+import { TUser } from "@/entities/user/model/user.entity"
+import { ProfileIcon } from "@/shared/ui/icons/profile-icon"
 import { Menu, MenuButton, MenuItems, Transition } from "@headlessui/react"
 import { FC, Fragment } from "react"
 import { menuLinksLogin, menuLinksLogout } from "./constants"
-import { TUser } from "../../../../entities/user/model/user.entity"
-import { ProfileIcon } from "../../../../shared/ui/icons/profile-icon"
 import { MenuLink } from "./components/menu-link"
-import { useAppDispatch } from "../../../../app/hooks"
 import { logout } from "../../model/auth-slice"
-import { clearUser } from "../../../../entities/user/model/user-slice"
+import { clearUser } from "@/entities/user/model/user-slice"
 
 export const ProfileMenuDropdown: FC<{ user: TUser }> = ({ user }) => {
   const dispatch = useAppDispatch()
