@@ -8,7 +8,7 @@ export const ChatsPage = () => {
     <Layout isViewHeader={false}>
       <div className="w-full h-full max-w-7xl mx-auto flex bg-base-100">
         <ChatSidebar header={<Header className="flex justify-end" />} />
-        <aside className="flex-1 h-full">
+        <aside className="h-full w-full">
           <Outlet />
         </aside>
       </div>
