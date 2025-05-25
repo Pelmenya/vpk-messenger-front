@@ -9,7 +9,7 @@ export const chatApi = createApi({
     endpoints: (builder) => ({
         getChats: builder.query<TChatsResponse, string>({
             query: (authKey) => ({
-                url: 'chats',
+                url: '',
                 method: 'GET',
                 credentials: 'include',
                 headers: {
