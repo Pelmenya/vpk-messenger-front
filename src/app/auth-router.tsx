@@ -4,7 +4,7 @@ import { ChatView } from "@/entities/chat/ui/chat-view/chat-view"
 import { TNullable } from "@/shared/types/t-nullable"
 import { TUser } from "@/entities/user/model/user.entity"
 import { IndexPage } from "@/pages/index-page"
-import { ChatPage } from "@/pages/chat-page"
+import { ChatsPage } from "@/pages/chats-page"
 import { LoginPage } from "@/pages/login-page"
 import { RegisterPage } from "@/pages/register-page"
 import { ChatSelectDefault } from "@/entities/chat/ui/chat-selected-default/chat-selected-default"
@@ -18,7 +18,7 @@ export const AuthRouter: FC<{
       <Route path="/" element={<IndexPage />} />
       {isLoggedIn && user ? (
         <>
-          <Route path="/chats" element={<ChatPage />}>
+          <Route path="/chats" element={<ChatsPage />}>
             <Route index element={<ChatSelectDefault />} />
             <Route path=":chatId" element={<ChatView />} />
           </Route>
