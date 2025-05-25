@@ -17,9 +17,21 @@ export const chatApi = createApi({
                 },
             }),
         }),
+        getMessagesByChatId: builder.query<any, { chatId: number; authKey: string }>({
+            query: ({chatId, authKey}) => ({
+                url: `chats/${chatId}/messages`,
+                method: 'GET',
+                credentials: 'include',
+                headers: {
+                    Authorization: 'Bearer ' + authKey,
+                },
+            }),
+        }),
+
     }),
 });
 
 export const {
-    useGetChatsQuery
+    useGetChatsQuery,
+    useGetMessagesByChatIdQuery,
 } = chatApi;

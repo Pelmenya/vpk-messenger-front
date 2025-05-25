@@ -16,7 +16,7 @@ export const ChatSidebar: FC<{ header?: JSX.Element }> = ({ header }) => {
   return (
     <aside className="min-w-[300px] w-[25%] max-w-[400px] h-full bg-base-200 border-r border-base-300 flex flex-col">
       {/* Шапка */}
-      <div className="relative p-4 flex-shrink-0 min-h-[72px] flex">
+      <div className="relative p-4 pb-16 flex-shrink-0 min-h-[72px] flex">
         <p className="font-semibold">{user?.displayName}</p>
         {header}
       </div>
