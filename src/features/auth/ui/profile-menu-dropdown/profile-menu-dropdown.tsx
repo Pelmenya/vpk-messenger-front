@@ -14,7 +14,7 @@ export const ProfileMenuDropdown: FC<{ user: TUser }> = ({ user }) => {
   return (
     <Menu as="div" className="relative inline-block text-left">
       <MenuButton
-        className="flex items-center justify-center rounded-full h-8 w-8 bg-neutral text-sm text-neutral-content focus:outline-none focus:outline-none active:ring-2 active:ring-white active:ring-offset-2 active:ring-offset-gray-800"
+        className="flex items-center cursor-pointer justify-center rounded-full h-8 w-8 bg-neutral text-sm text-neutral-content focus:outline-none focus:outline-none active:ring-2 active:ring-white active:ring-offset-2 active:ring-offset-gray-800"
         id="user-menu-button"
         aria-expanded="false"
         aria-haspopup="true"
