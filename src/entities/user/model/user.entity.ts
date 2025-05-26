@@ -5,6 +5,5 @@ export type TUser = {
 }
 
 export type TUserResponse = {
-    token: string;
     user: TUser;
 };
