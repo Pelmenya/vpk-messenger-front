@@ -27,9 +27,6 @@ export const chatSlice = createSlice({
     setConnectionStatus: (state, action: PayloadAction<TChatState["status"]>) => {
       state.status = action.payload;
     },
-    clearMessages: (state, action: PayloadAction<{ chatId: number }>) => {
-      state.messages[action.payload.chatId] = [];
-    },
     clearAllMessages: (state) => {
       state.messages = {};
     }
@@ -40,6 +37,5 @@ export const {
   receiveHistoryMessages,
   receiveMessage,
   setConnectionStatus,
-  clearMessages,
   clearAllMessages
 } = chatSlice.actions;
