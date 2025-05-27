@@ -1,43 +1,29 @@
-// authSlice.ts
-import { TNullable } from '@/shared/types/t-nullable';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { TNullable } from '@/shared/types/t-nullable';
 
-// Определяем тип для состояния аутентификации
-type TAuthState = {
+export type TAuthState = {
   token: TNullable<string>;
   isLoggedIn: boolean;
 };
 
-// Исходное состояние
 const initialState: TAuthState = {
   token: null,
   isLoggedIn: false,
 };
 
-// Создаем слайс
 export const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    login(state, action: PayloadAction<string>) {
+    setToken(state, action: PayloadAction<TNullable<string>>) {
       state.token = action.payload;
-      state.isLoggedIn = true;
-      localStorage.setItem('auth', JSON.stringify(state));
+      state.isLoggedIn = Boolean(action.payload);
     },
     logout(state) {
       state.token = null;
       state.isLoggedIn = false;
-      localStorage.removeItem('auth');
-    },
-    loadAuthFromStorage(state) {
-      const storedAuth = localStorage.getItem('auth');
-      if (storedAuth) {
-        const authData: TAuthState = JSON.parse(storedAuth);
-        state.token = authData.token;
-        state.isLoggedIn = authData.isLoggedIn;
-      }
     },
   },
 });
 
-export const { login, logout, loadAuthFromStorage } = authSlice.actions;
+export const { setToken, logout } = authSlice.actions;
