@@ -9,13 +9,25 @@ import { ChatSelectDefault } from "@/entities/chat/ui/chat-selected-default/chat
 import { useAppSelector } from "./hooks"
 import { getIsLoggedIn } from "@/features/auth/model/auth-selectors"
 import { getUser } from "@/entities/user/model/user-selectors"
+import { Loading } from "@/shared/ui/loading/loading"
 
-export const AuthRouter: FC<{isAuthLoading: boolean}> = ({ isAuthLoading}) => {
+export const AuthRouter: FC<{ isAuthLoading: boolean }> = ({
+  isAuthLoading,
+}) => {
   const isLoggedIn = useAppSelector(getIsLoggedIn)
   const user = useAppSelector(getUser)
 
-  if (isAuthLoading) return <div>Loading ...</div>
-
+  if (isAuthLoading)
+    return (
+      <div className="w-full h-full flex items-center justify-center">
+        <Loading
+          color="text-primary"
+          size="loading-lg"
+          type="loading-infinity"
+          className="p-8"
+        />
+      </div>
+    )
 
   return (
     <Routes>
