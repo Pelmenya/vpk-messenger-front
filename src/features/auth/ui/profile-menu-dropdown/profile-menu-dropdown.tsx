@@ -7,6 +7,7 @@ import { menuLinksLogin, menuLinksLogout } from "./constants"
 import { MenuLink } from "./components/menu-link"
 import { logout } from "../../model/auth-slice"
 import { clearUser } from "@/entities/user/model/user-slice"
+import { AUTH_KEY_STORAGE } from "@/app/auth-provider"
 
 export const ProfileMenuDropdown: FC<{ user: TUser }> = ({ user }) => {
   const dispatch = useAppDispatch()
@@ -60,7 +61,9 @@ export const ProfileMenuDropdown: FC<{ user: TUser }> = ({ user }) => {
                     link.type === "logout"
                       ? async () => {
                           dispatch(logout())
+                          localStorage.removeItem(AUTH_KEY_STORAGE)
                           dispatch(clearUser())
+
                         }
                       : undefined
                   }

@@ -17,7 +17,7 @@ if (container) {
     <React.StrictMode>
       <Provider store={store}>
           <BrowserRouter>
-            <App   />
+            <App />
           </BrowserRouter>
       </Provider>
     </React.StrictMode>,

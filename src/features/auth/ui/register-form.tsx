@@ -6,13 +6,16 @@ import { TNullable } from "@/shared/types/t-nullable"
 import { usePostLoginMutation, usePostRegisterMutation } from "../api/auth-api"
 import { TRegister } from "../model/types/t-register"
 import { setUser } from "@/entities/user/model/user-slice"
-import { login } from "../model/auth-slice"
+import { setToken } from "../model/auth-slice"
 import { FormWithTitle } from "@/shared/ui/form-with-title/form-with-title"
 import { InputField } from "@/shared/ui/input-field/input-field"
 import { schemaRegister } from "../model/schemas/schema-register"
+import { AUTH_KEY_STORAGE } from "@/app/auth-provider"
+import { useNavigate } from "react-router-dom"
 
 export const RegisterForm: FC = () => {
   const dispatch = useAppDispatch()
+  const navigate = useNavigate()
 
   const [resError, setResError] = useState<TNullable<string>>(null)
   const [postRegister, { isLoading: isLoadingRegister }] =
@@ -43,10 +46,14 @@ export const RegisterForm: FC = () => {
         }).unwrap()
         if (resLogin.user && resLogin.token) {
           dispatch(setUser(resLogin.user))
-          dispatch(login(resLogin.token))
+          dispatch(setToken(resLogin.token))
+          localStorage.setItem(
+            AUTH_KEY_STORAGE,
+            JSON.stringify({ token: resLogin.token }),
+          )
+          // Если логин успешен, можно выполнить навигацию
+          navigate("/chats-page")
         }
-        // Если логин успешен, можно выполнить навигацию
-        // navigate("/chats-page")
       }
     } catch (error: any) {
       setResError(error.data?.message || "Произошла ошибка")

@@ -1,6 +1,6 @@
-import { TUserState } from '@/entities/user/model/user-slice';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { TRegister } from '../model/types/t-register';
+import { TUserResponse } from '@/entities/user/model/user.entity';
 
 type RegisterResponse = {
     message: string;
@@ -13,7 +13,7 @@ export const authApi = createApi({
     }),
 
     endpoints: (builder) => ({
-        postLogin: builder.mutation<TUserState & { token: string }, Omit<TRegister, 'displayName'>>({
+        postLogin: builder.mutation<TUserResponse & { token: string }, Omit<TRegister, 'displayName'>>({
             query: ({ username, password }) => ({
                 url: 'login',
                 method: 'POST',

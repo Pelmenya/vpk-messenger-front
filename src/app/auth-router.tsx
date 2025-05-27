@@ -1,4 +1,4 @@
-import { FC } from "react"
+import { FC, useEffect } from "react"
 import { Navigate, Route, Routes } from "react-router-dom"
 import { ChatView } from "@/entities/chat/ui/chat-view/chat-view"
 import { IndexPage } from "@/pages/index-page"
@@ -10,10 +10,13 @@ import { useAppSelector } from "./hooks"
 import { getIsLoggedIn } from "@/features/auth/model/auth-selectors"
 import { getUser } from "@/entities/user/model/user-selectors"
 
-export const AuthRouter: FC = () => {
-    const isLoggedIn = useAppSelector(getIsLoggedIn)
-    const user = useAppSelector(getUser)
-  
+export const AuthRouter: FC<{isAuthLoading: boolean}> = ({ isAuthLoading}) => {
+  const isLoggedIn = useAppSelector(getIsLoggedIn)
+  const user = useAppSelector(getUser)
+
+  if (isAuthLoading) return <div>Loading ...</div>
+
+
   return (
     <Routes>
       <Route path="/" element={<IndexPage />} />

@@ -1,18 +1,58 @@
-import { useEffect, type FC, type ReactNode } from "react"
+import { FC, ReactNode, useEffect, useState } from "react"
 import { useAppDispatch } from "./hooks"
-import { loadAuthFromStorage } from "../features/auth/model/auth-slice"
-import { loadUserFromStorage } from "../entities/user/model/user-slice"
+import { setUser } from "@/entities/user/model/user-slice"
+import { setToken, logout } from "@/features/auth/model/auth-slice"
+import { useLazyGetUserMeQuery } from "@/entities/user/api/user-api"
 
-export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
-  // Здесь можно сделать серьезную логику, аутентификациии
+export const AUTH_KEY_STORAGE = "auth"
+
+type TAuthProviderProps = {
+  children: (isAuthLoading: boolean) => ReactNode;
+};
+
+
+export const AuthProvider: FC<TAuthProviderProps> = ({ children }) => {
   const dispatch = useAppDispatch()
+  const [fetchUserMe ] = useLazyGetUserMeQuery()
+  const [isAuthLoading, setIsAuthLoading] = useState(true);
 
   useEffect(() => {
-    // Загружаем состояние аутентификации из localStorage
-    dispatch(loadAuthFromStorage())
-    // Загружаем состояние user из localStorage
-    dispatch(loadUserFromStorage())
-  }, [dispatch, loadAuthFromStorage, loadUserFromStorage])
+    const checkAuth = async () => {
+      let token: string | null = null
+      const stored = localStorage.getItem(AUTH_KEY_STORAGE);
+      
+      if (stored) {
+        try {
+          token = JSON.parse(stored).token
+        } catch (e) {
 
-  return <>{children}</>
+        }
+      }
+
+      if (!token) {
+        dispatch(setUser(null))
+        dispatch(setToken(null))
+        setIsAuthLoading(false); // <-- Устанавливаем "загрузка завершена"
+        return
+      }
+
+      dispatch(setToken(token))
+
+      try {
+        const user = await fetchUserMe({ authKey: token }).unwrap()
+        
+        dispatch(setUser(user))
+
+      } catch (e) {
+        dispatch(setUser(null))
+        dispatch(logout())
+        localStorage.removeItem(AUTH_KEY_STORAGE)
+      }
+      setIsAuthLoading(false); // <-- Устанавливаем "загрузка завершена"
+    }
+
+    checkAuth()
+  }, [dispatch, fetchUserMe])
+
+  return <>{children(isAuthLoading)}</>;
 }
