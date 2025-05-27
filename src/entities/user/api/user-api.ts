@@ -16,10 +16,20 @@ export const userApi = createApi({
                 },
             }),
         }),
-
+        getUserMe: builder.query<any, {authKey: string }>({
+            query: ({ authKey }) => ({
+                url: 'me',
+                method: 'GET',
+                credentials: 'include',
+                headers: {
+                    Authorization: 'Bearer ' + authKey,
+                },
+            }),
+        }),
     }),
 });
 
 export const {
     useGetUserByIdQuery,
+    useLazyGetUserMeQuery,
 } = userApi;

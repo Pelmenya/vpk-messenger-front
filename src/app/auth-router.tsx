@@ -1,18 +1,19 @@
 import { FC } from "react"
 import { Navigate, Route, Routes } from "react-router-dom"
 import { ChatView } from "@/entities/chat/ui/chat-view/chat-view"
-import { TNullable } from "@/shared/types/t-nullable"
-import { TUser } from "@/entities/user/model/user.entity"
 import { IndexPage } from "@/pages/index-page"
 import { ChatsPage } from "@/pages/chats-page"
 import { LoginPage } from "@/pages/login-page"
 import { RegisterPage } from "@/pages/register-page"
 import { ChatSelectDefault } from "@/entities/chat/ui/chat-selected-default/chat-selected-default"
+import { useAppSelector } from "./hooks"
+import { getIsLoggedIn } from "@/features/auth/model/auth-selectors"
+import { getUser } from "@/entities/user/model/user-selectors"
 
-export const AuthRouter: FC<{
-  isLoggedIn: boolean
-  user: TNullable<TUser>
-}> = ({ isLoggedIn, user }) => {
+export const AuthRouter: FC = () => {
+    const isLoggedIn = useAppSelector(getIsLoggedIn)
+    const user = useAppSelector(getUser)
+  
   return (
     <Routes>
       <Route path="/" element={<IndexPage />} />

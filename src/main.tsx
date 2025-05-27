@@ -4,9 +4,9 @@ import ReactDOM from "react-dom/client"
 import { Provider } from "react-redux"
 import { store } from "./app/store/store"
 import { BrowserRouter } from "react-router-dom"
-import { App } from "./app"
 
 import "./index.css"
+import { App } from "./app/app"
 
 // Получаем контейнер для рендеринга приложения
 const container = document.getElementById("root")
@@ -17,7 +17,7 @@ if (container) {
     <React.StrictMode>
       <Provider store={store}>
           <BrowserRouter>
-            <App />
+            <App   />
           </BrowserRouter>
       </Provider>
     </React.StrictMode>,
