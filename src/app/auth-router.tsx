@@ -1,4 +1,4 @@
-import { FC, useEffect } from "react"
+import { FC } from "react"
 import { Navigate, Route, Routes } from "react-router-dom"
 import { ChatView } from "@/entities/chat/ui/chat-view/chat-view"
 import { IndexPage } from "@/pages/index-page"
