@@ -4,12 +4,12 @@ import { TChatsResponse } from '../model/types/t-chats-response';
 export const chatApi = createApi({
     reducerPath: 'chatApi',
     baseQuery: fetchBaseQuery({
-        baseUrl: import.meta.env.VITE_BACKEND_BASE_URL + '/chat',
+        baseUrl: import.meta.env.VITE_BACKEND_BASE_URL + '',
     }),
     endpoints: (builder) => ({
         getChats: builder.query<TChatsResponse, string>({
             query: (authKey) => ({
-                url: '',
+                url: 'chat',
                 method: 'GET',
                 credentials: 'include',
                 headers: {
@@ -19,7 +19,7 @@ export const chatApi = createApi({
         }),
         getMessagesByChatId: builder.query<any, { chatId: number; authKey: string }>({
             query: ({chatId, authKey}) => ({
-                url: `${chatId}/messages`,
+                url: `message/${chatId}`,
                 method: 'GET',
                 credentials: 'include',
                 headers: {
