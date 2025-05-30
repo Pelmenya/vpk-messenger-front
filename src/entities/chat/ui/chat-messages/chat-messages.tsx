@@ -31,7 +31,7 @@ export const ChatMessages: FC<TChatMessagesProps> = ({ messages }) => {
                         </div>
                         {msg.messageImageUrl && (
                             <img
-                                src={msg.messageImageUrl}
+                                src={import.meta.env.VITE_BACKEND_BASE_IMAGES_URL + msg.messageImageUrl}
                                 alt="chat-img"
                                 className="rounded-lg max-w-xs mt-2 border"
                                 style={{ maxHeight: 240 }}
