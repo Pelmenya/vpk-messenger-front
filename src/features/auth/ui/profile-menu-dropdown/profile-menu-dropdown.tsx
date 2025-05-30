@@ -22,11 +22,11 @@ export const ProfileMenuDropdown: FC<{ user: TUser }> = ({ user }) => {
       >
         <span className="sr-only">Open user menu</span>
         <>
-          {false ? ( // будет аватар -> добавить ссылку в юзера
+          {user.profileImageUrl ? ( // будет аватар -> добавить ссылку в юзера
             <picture>
               <img
                 className="h-8 w-8 rounded-full"
-                src={""}
+                src={import.meta.env.VITE_BACKEND_BASE_IMAGES_URL + user.profileImageUrl}
                 alt={user.username}
               />
             </picture>
