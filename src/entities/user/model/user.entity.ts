@@ -1,3 +1,5 @@
+import { TNullable } from "@/shared/types/t-nullable";
+
 export enum EUserType {
     Admin = 'Admin',
     DefaultUser = 'DefaultUser',
@@ -8,13 +10,13 @@ export type TUser = {
     username: string;
     displayName: string;
     email: string;
-    phoneNumber: string | null;
-    profileImageUrl: string | null;
-    bio: string | null;
-    birthDate: string | null;
+    phoneNumber: TNullable<string>;
+    profileImageUrl: TNullable<string>;
+    bio: TNullable<string>;
+    birthDate: TNullable<string>;
     createdAt: string;
-    lastLoginAt: string | null;
-    position: string | null;
+    lastLoginAt: TNullable<string>;
+    position: TNullable<string>;
     userType: EUserType;
 };
 
