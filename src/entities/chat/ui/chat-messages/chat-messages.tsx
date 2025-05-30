@@ -2,8 +2,8 @@ import { FC } from "react"
 import { TMessage } from "@/entities/chat/model/types/t-message"
 import { useAppSelector } from "@/app/hooks"
 import { getUser } from "@/entities/user/model/user-selectors"
-import { IconDownload } from "@tabler/icons-react" // Или используйте другую иконку
-import { DataJson } from "@/shared/ui/data-json/data-json"
+import { IconDownload } from "@tabler/icons-react"
+import { ChatHeader, ChatUserAvatar } from "../chat-user-avatar/chat-user-avatar"
 
 type TChatMessagesProps = {
   messages: TMessage[]
@@ -21,27 +21,17 @@ export const ChatMessages: FC<TChatMessagesProps> = ({ messages }) => {
             key={msg.messageId}
             className={`chat ${isMe ? "chat-end" : "chat-start"}`}
           >
-            <div className="chat-image avatar">
-              {msg?.user && msg?.user?.profileImageUrl ? (
-                <img
-                  className="w-10 h-10 rounded-full bg-base-200 flex items-center justify-center text-xl"
-                  src={
-                    import.meta.env.VITE_BACKEND_BASE_IMAGES_URL +
-                    msg.user.profileImageUrl
-                  }
-                />
-              ) : (
-                <div className="w-10 h-10 rounded-full bg-base-200 flex items-center justify-center text-xl">
-                  {msg?.user && msg.user.displayName[0]}
-                </div>
-              )}
+            <div className="chat-image">
+              <ChatUserAvatar
+                displayName={msg?.user?.displayName}
+                profileImageUrl={msg?.user?.profileImageUrl}
+              />
             </div>
-            <div className="chat-header flex items-center gap-2">
-              <span className="font-semibold">{msg?.user && msg.user.displayName}</span>
-              <time className="text-xs opacity-50">
-                {new Date(msg.createdAt).toLocaleString()}
-              </time>
-            </div>
+            <ChatHeader
+              displayName={msg?.user?.displayName}
+              position={msg?.user?.position}
+              createdAt={msg.createdAt}
+            />
             {msg.messageImageUrl && (
               <img
                 src={
