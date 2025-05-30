@@ -9,9 +9,31 @@ import { Loading } from "@/shared/ui/loading/loading"
 export const ChatSidebar: FC<{ header?: JSX.Element }> = ({ header }) => {
   const token = useAppSelector(getToken)
   const user = useAppSelector(getUser)
-  const { data: dataChats, isLoading: isLoadingChats } = useGetChatsQuery(
-    token || "",
-  )
+
+  // Делаем запрос только когда токен есть!
+  const {
+    data: dataChats,
+    isLoading: isLoadingChats,
+    isFetching: isFetchingChats,
+  } = useGetChatsQuery(token!, {
+    skip: !token, // <-- главное исправление!
+  })
+
+  // Можно показать лоадинг, если user или token ещё не готовы
+  if (!user || !token) {
+    return (
+      <aside className="min-w-[300px] w-[25%] max-w-[400px] h-full bg-base-200 border-r border-base-300 flex flex-col">
+        <div className="relative p-4 pb-16 flex-shrink-0 min-h-[72px] flex justify-between gap-4">
+          <Loading
+            color="text-primary"
+            size="loading-sm"
+            type="loading-infinity"
+            className="p-4"
+          />
+        </div>
+      </aside>
+    )
+  }
 
   return (
     <aside className="min-w-[300px] w-[25%] max-w-[400px] h-full bg-base-200 border-r border-base-300 flex flex-col">
@@ -22,7 +44,7 @@ export const ChatSidebar: FC<{ header?: JSX.Element }> = ({ header }) => {
       </div>
       {/* Список чатов скроллируемый */}
       <div className="flex-1 h-full overflow-y-auto scrollbar-thin scrollbar-thumb-base-300 scrollbar-track-transparent">
-        {isLoadingChats ? (
+        {isLoadingChats || isFetchingChats ? (
           <Loading
             color="text-primary"
             size="loading-sm"

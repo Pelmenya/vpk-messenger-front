@@ -12,6 +12,7 @@ import { InputField } from "@/shared/ui/input-field/input-field"
 import { schemaRegister } from "../model/schemas/schema-register"
 import { AUTH_KEY_STORAGE } from "@/app/auth-provider"
 import { useNavigate } from "react-router-dom"
+import { useLazyGetUserMeQuery } from "@/entities/user/api/user-api"
 
 export const RegisterForm: FC = () => {
   const dispatch = useAppDispatch()
@@ -21,6 +22,7 @@ export const RegisterForm: FC = () => {
   const [postRegister, { isLoading: isLoadingRegister }] =
     usePostRegisterMutation()
   const [postLogin, { isLoading: isLoadingLogin }] = usePostLoginMutation()
+  const [fetchUserMe] = useLazyGetUserMeQuery()
 
   const {
     register,
@@ -45,8 +47,10 @@ export const RegisterForm: FC = () => {
           password: data.password,
         }).unwrap()
         if (resLogin.user && resLogin.token) {
-          dispatch(setUser(resLogin.user))
           dispatch(setToken(resLogin.token))
+          const user = await fetchUserMe({ authKey: resLogin.token }).unwrap()
+          dispatch(setUser(user))
+
           localStorage.setItem(
             AUTH_KEY_STORAGE,
             JSON.stringify({ token: resLogin.token }),

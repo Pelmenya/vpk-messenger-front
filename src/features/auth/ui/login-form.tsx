@@ -12,6 +12,7 @@ import { FormWithTitle } from "@/shared/ui/form-with-title/form-with-title"
 import { InputField } from "@/shared/ui/input-field/input-field"
 import { AUTH_KEY_STORAGE } from "@/app/auth-provider"
 import { useNavigate } from "react-router-dom"
+import { useLazyGetUserMeQuery } from "@/entities/user/api/user-api"
 
 export const LoginForm: FC = () => {
   const dispatch = useAppDispatch()
@@ -19,6 +20,8 @@ export const LoginForm: FC = () => {
   const [resError, setResError] = useState<TNullable<string>>(null)
 
   const [postLogin, { isLoading }] = usePostLoginMutation()
+  const [fetchUserMe ] = useLazyGetUserMeQuery()
+  
 
   const {
     register,
@@ -38,8 +41,9 @@ export const LoginForm: FC = () => {
         password: data.password,
       }).unwrap()
       if (resLogin.user && resLogin.token) {
-        dispatch(setUser(resLogin.user))
         dispatch(setToken(resLogin.token))
+        const user = await fetchUserMe({ authKey: resLogin.token }).unwrap()
+        dispatch(setUser(user))
         localStorage.setItem(
           AUTH_KEY_STORAGE,
           JSON.stringify({ token: resLogin.token }),
