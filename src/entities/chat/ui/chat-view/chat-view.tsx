@@ -7,6 +7,7 @@ import { selectMessagesByChatId } from "../../model/chat-selectors"
 import { FC, useEffect } from "react"
 import { ChatDivider } from "../chat-sidebar/chat-divider/chat-divider"
 import { DataJson } from "@/shared/ui/data-json/data-json"
+import { ChatMessages } from "../chat-messages/chat-messages"
 
 export const ChatView: FC = () => {
   const { chatId } = useParams<{ chatId: string }>()
@@ -53,7 +54,7 @@ export const ChatView: FC = () => {
         <ChatDivider />
       </header>
       <main className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-base-300 scrollbar-track-transparent">
-        <DataJson data={allMessages} />
+        <ChatMessages messages={allMessages} />
       </main>
       <footer className="sticky top-0 w-full px-4 z-10">
         <ChatDivider />
