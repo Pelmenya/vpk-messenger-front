@@ -30,7 +30,7 @@ export const ChatMessages: FC<TChatMessagesProps> = ({ messages }) => {
             </div>
             <ChatHeader
               displayName={msg?.user?.displayName}
-              position={msg?.user?.position}
+              position={msg?.user?.positionName}
               createdAt={msg.createdAt}
             />
             {msg.messageImageUrl && (

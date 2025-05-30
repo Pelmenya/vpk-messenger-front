@@ -16,7 +16,7 @@ export type TUser = {
     birthDate: TNullable<string>;
     createdAt: string;
     lastLoginAt: TNullable<string>;
-    position: TNullable<string>;
+    positionName: TNullable<string>;
     userType: EUserType;
 };
 
