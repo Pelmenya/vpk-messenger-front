@@ -10,6 +10,7 @@ import { useAppSelector } from "./hooks"
 import { getIsLoggedIn } from "@/features/auth/model/auth-selectors"
 import { getUser } from "@/entities/user/model/user-selectors"
 import { Loading } from "@/shared/ui/loading/loading"
+import { ProfilePage } from "@/pages/profile-page"
 
 export const AuthRouter: FC<{ isAuthLoading: boolean }> = ({
   isAuthLoading,
@@ -38,6 +39,7 @@ export const AuthRouter: FC<{ isAuthLoading: boolean }> = ({
             <Route index element={<ChatSelectDefault />} />
             <Route path=":chatId" element={<ChatView />} />
           </Route>
+          <Route path="/profile" element={<ProfilePage />} />
           <Route path="*" element={<Navigate to="/chats" />} />
         </>
       ) : (

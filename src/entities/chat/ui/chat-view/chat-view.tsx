@@ -60,6 +60,7 @@ export const ChatView: FC = () => {
     return () => {
       dispatch({ type: "chat/disconnect" })
       dispatch(clearAllMessages())
+      dispatch(setSelectedChatId(null))
     }
   }, [dispatch, chatId, token])
 

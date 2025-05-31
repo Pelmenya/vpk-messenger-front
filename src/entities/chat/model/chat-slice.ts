@@ -18,7 +18,7 @@ export const chatSlice = createSlice({
     setConnectionStatus: (state, action: PayloadAction<TChatState["status"]>) => {
       state.status = action.payload;
     },
-    setSelectedChatId: (state, action: PayloadAction<number>) => {
+    setSelectedChatId: (state, action: PayloadAction<TNullable<number>>) => {
       state.selectedChatId = action.payload;
     }
   }
