@@ -97,11 +97,13 @@ export const ChatSendForm = ({
       {/* Кнопка отправки */}
       <button
         type="submit"
-        className="outline-none border-none bg-transparent cursor-pointer h-7 w-7 ml-2 flex items-center justify-center"
+        className="btn btn-primary btn-circle flex items-center justify-center"
         tabIndex={0}
         disabled={message.trim().length < 2}
       >
-        <ChatIcon type="send" className={`w-7 h-7 ${iconColor}`} />
+        {
+            <ChatIcon type="send" className={`w-7 h-7 rounded rounded-full ${message.trim().length < 2 ? 'bg-none'  : iconColor}`} />
+        }
       </button>
     </form>
   )
