@@ -2,12 +2,16 @@ import { useAppDispatch, useAppSelector } from "@/app/hooks"
 import { useParams } from "react-router-dom"
 import { useGetMessagesByChatIdQuery } from "../../api/chat-api"
 import { getToken } from "@/features/auth/model/auth-selectors"
-import { receiveHistoryMessages, clearAllMessages } from "../../model/chat-slice"
+import {
+  receiveHistoryMessages,
+  clearAllMessages,
+} from "../../model/chat-slice"
 import { selectMessagesByChatId } from "../../model/chat-selectors"
 import { FC, useEffect } from "react"
 import { ChatDivider } from "../chat-sidebar/chat-divider/chat-divider"
 import { DataJson } from "@/shared/ui/data-json/data-json"
 import { ChatMessages } from "../chat-messages/chat-messages"
+import { ChatSendForm } from "../chat-send-form/chat-send-form"
 
 export const ChatView: FC = () => {
   const { chatId } = useParams<{ chatId: string }>()
@@ -58,7 +62,13 @@ export const ChatView: FC = () => {
       </main>
       <footer className="sticky top-0 w-full px-4 z-10">
         <ChatDivider />
-        <p className="py-4">{chatId}</p>
+        <ChatSendForm
+          onSend={msg => {
+            // Здесь твоя логика отправки сообщения
+            console.log(msg)
+            // dispatch(sendMessage({ chatId, message: msg })) и т.д.
+          }}
+        />
       </footer>
     </div>
   )
