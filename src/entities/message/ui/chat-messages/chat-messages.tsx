@@ -1,4 +1,4 @@
-import { FC } from "react"
+import { FC, useEffect, useRef } from "react"
 import { TMessage } from "@/entities/chat/model/types/t-message"
 import { useAppSelector } from "@/app/hooks"
 import { getUser } from "@/entities/user/model/user-selectors"
@@ -13,6 +13,12 @@ type TChatMessagesProps = {
 
 export const ChatMessages: FC<TChatMessagesProps> = ({ messages }) => {
   const currentUser = useAppSelector(getUser)
+  const messagesEndRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    // Скроллим в самый низ при изменении сообщений
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
+  }, [messages])
 
   return (
     <div className="flex flex-col gap-4 p-4">
@@ -67,6 +73,8 @@ export const ChatMessages: FC<TChatMessagesProps> = ({ messages }) => {
           </div>
         )
       })}
+      {/* Этот div будет референсом для прокрутки */}
+      <div ref={messagesEndRef} />
     </div>
   )
 }
