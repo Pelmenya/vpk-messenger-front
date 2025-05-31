@@ -23,9 +23,6 @@ export const messageSlice = createSlice({
       state.messages[chatId] = state.messages[chatId] || [];
       state.messages[chatId].push(message);
     },
-    setConnectionStatus: (state, action: PayloadAction<TChatState["status"]>) => {
-      state.status = action.payload;
-    },
     clearAllMessages: (state) => {
       state.messages = {};
     },
@@ -35,6 +32,5 @@ export const messageSlice = createSlice({
 export const {
   receiveHistoryMessages,
   receiveMessage,
-  setConnectionStatus,
   clearAllMessages,
 } = messageSlice.actions;

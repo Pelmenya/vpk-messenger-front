@@ -1,15 +1,16 @@
 import { useAppDispatch, useAppSelector } from "@/app/hooks"
 import { useParams } from "react-router-dom"
-import {
-  useGetChatByIdQuery,
-} from "../../api/chat-api"
+import { useGetChatByIdQuery } from "../../api/chat-api"
 import { getToken } from "@/features/auth/model/auth-selectors"
 import { FC, useEffect } from "react"
 import { ChatDivider } from "../chat-sidebar/chat-divider/chat-divider"
 import { ChatMessages } from "../../../message/ui/chat-messages/chat-messages"
 import { ChatSendForm } from "../../../message/ui/chat-send-form/chat-send-form"
 import { useGetMessagesByChatIdQuery } from "@/entities/message/api/message-api"
-import { clearAllMessages, receiveHistoryMessages } from "@/entities/message/model/message-slice"
+import {
+  clearAllMessages,
+  receiveHistoryMessages,
+} from "@/entities/message/model/message-slice"
 import { selectMessagesByChatId } from "@/entities/message/model/message-selectors"
 import { setSelectedChatId } from "../../model/chat-slice"
 
@@ -17,7 +18,6 @@ export const ChatView: FC = () => {
   const { chatId } = useParams<{ chatId: string }>()
   const dispatch = useAppDispatch()
   const token = useAppSelector(getToken)
-
 
   const { data: dataMessages } = useGetMessagesByChatIdQuery(
     {
@@ -39,7 +39,7 @@ export const ChatView: FC = () => {
     selectMessagesByChatId(state, Number(chatId)),
   )
 
-  // Пишем историю в slice при первой загрузке (или смене чата)
+  // История сообщений
   useEffect(() => {
     if (dataMessages && chatId) {
       dispatch(
@@ -48,18 +48,20 @@ export const ChatView: FC = () => {
           messages: dataMessages,
         }),
       )
-      dispatch(setSelectedChatId(Number(chatId)));
+      dispatch(setSelectedChatId(Number(chatId)))
     }
   }, [dataMessages, chatId, dispatch])
 
-  // Коннектим SignalR и чистим сообщения при размонтировании/смене чата
+  // SignalR: подключаемся при выборе чата, отключаемся при уходе
   useEffect(() => {
-    dispatch({ type: "chat/connect" })
+    if (chatId && token) {
+      dispatch({ type: "chat/connect", payload: { chatId: Number(chatId) } })
+    }
     return () => {
       dispatch({ type: "chat/disconnect" })
-      dispatch(clearAllMessages()) // <-- очищаем все сообщения!
+      dispatch(clearAllMessages())
     }
-  }, [dispatch, chatId])
+  }, [dispatch, chatId, token])
 
   return (
     <div className="flex flex-col h-full w-full">
