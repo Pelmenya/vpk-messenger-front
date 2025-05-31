@@ -1,23 +1,35 @@
 import { PaperclipIcon } from "@/shared/ui/icons/paper-clip-icon"
 import React, { useRef, useState } from "react"
 import { ChatIcon } from "../chat-icon/chat-icon"
+import { useSendTextMessageMutation } from "../../api/message-api"
+import { useAppSelector } from "@/app/hooks"
+import { getSelectedChatId } from "@/entities/chat/model/chat-selectors"
+import { getToken } from "@/features/auth/model/auth-selectors"
 
 export const ChatSendForm = ({
-  onSend,
   iconColor = "text-primary",
 }: {
-  onSend?: (msg: string) => void
   iconColor?: string // tailwind класс для управления цветом
 }) => {
+  const chatId = useAppSelector(getSelectedChatId)
+  const token = useAppSelector(getToken)
+
   const [message, setMessage] = useState("")
   const [menuOpen, setMenuOpen] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
+  const [sendTextMessage] = useSendTextMessageMutation()
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     if (message.trim().length > 1) {
-      onSend?.(message.trim())
-      setMessage("")
+      if (chatId && token) {
+        sendTextMessage({
+          chatId,
+          authKey: token,
+          content: message.trim(),
+        }).unwrap()
+        setMessage("")
+      }
       inputRef.current?.focus()
     }
   }
@@ -102,7 +114,10 @@ export const ChatSendForm = ({
         disabled={message.trim().length < 2}
       >
         {
-            <ChatIcon type="send" className={`w-7 h-7 rounded rounded-full ${message.trim().length < 2 ? 'bg-none'  : iconColor}`} />
+          <ChatIcon
+            type="send"
+            className={`w-7 h-7 rounded rounded-full ${message.trim().length < 2 ? "bg-none" : iconColor}`}
+          />
         }
       </button>
     </form>

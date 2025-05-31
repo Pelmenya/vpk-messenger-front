@@ -11,11 +11,13 @@ import { ChatSendForm } from "../../../message/ui/chat-send-form/chat-send-form"
 import { useGetMessagesByChatIdQuery } from "@/entities/message/api/message-api"
 import { clearAllMessages, receiveHistoryMessages } from "@/entities/message/model/message-slice"
 import { selectMessagesByChatId } from "@/entities/message/model/message-selectors"
+import { setSelectedChatId } from "../../model/chat-slice"
 
 export const ChatView: FC = () => {
   const { chatId } = useParams<{ chatId: string }>()
   const dispatch = useAppDispatch()
   const token = useAppSelector(getToken)
+
 
   const { data: dataMessages } = useGetMessagesByChatIdQuery(
     {
@@ -46,6 +48,7 @@ export const ChatView: FC = () => {
           messages: dataMessages,
         }),
       )
+      dispatch(setSelectedChatId(Number(chatId)));
     }
   }, [dataMessages, chatId, dispatch])
 
@@ -58,10 +61,6 @@ export const ChatView: FC = () => {
     }
   }, [dispatch, chatId])
 
-  const handleSendTextMsg = (text: string) =>
-   {
-    
-  }
   return (
     <div className="flex flex-col h-full w-full">
       <header className="sticky top-0 w-full px-4 z-10">
@@ -73,13 +72,7 @@ export const ChatView: FC = () => {
       </main>
       <footer className="sticky top-0 w-full px-4 z-10">
         <ChatDivider />
-        <ChatSendForm
-          onSend={msg => {
-            // Здесь твоя логика отправки сообщения
-            console.log(msg)
-            // dispatch(sendMessage({ chatId, message: msg })) и т.д.
-          }}
-        />
+        <ChatSendForm />
       </footer>
     </div>
   )

@@ -17,10 +17,26 @@ export const messageApi = createApi({
                 },
             }),
         }),
+        sendTextMessage: builder.mutation<any, { chatId: number; content: string; authKey: string }>({
+            query: ({ chatId, content, authKey }) => ({
+                url: 'send-message',
+                method: 'POST',
+                credentials: 'include',
+                body: {
+                    chatId,
+                    content,
+                },
+                headers: {
+                    Authorization: 'Bearer ' + authKey,
+                },
+
+            }),
+        }),
 
     }),
 });
 
 export const {
     useGetMessagesByChatIdQuery,
+    useSendTextMessageMutation,
 } = messageApi;
