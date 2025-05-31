@@ -12,6 +12,7 @@ export const PaperclipIcon = ({ className = "" }: { className?: string }) => (
       strokeWidth={2}
       strokeLinecap="round"
       strokeLinejoin="round"
+      transform="translate(0.5,1)" // вправо и вниз
     />
   </svg>
 );

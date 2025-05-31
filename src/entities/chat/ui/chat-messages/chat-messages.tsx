@@ -42,8 +42,7 @@ export const ChatMessages: FC<TChatMessagesProps> = ({ messages }) => {
                   msg.messageImageUrl
                 }
                 alt="chat-img"
-                className="rounded-lg max-w-xs mt-2 border"
-                style={{ maxHeight: 240 }}
+                className="rounded-lg max-w-xs max-h-[240px] mt-2 border"
               />
             )}
             {msg.messageFileUrl && (
@@ -55,7 +54,9 @@ export const ChatMessages: FC<TChatMessagesProps> = ({ messages }) => {
                 className="link link-primary flex items-center gap-1 mt-2"
               >
                 <IconDownload size={18} />
-                {msg.messageFileName || "Скачать файл"}
+                <span className="truncate max-w-md block">
+                  {msg.messageFileName || "Скачать файл"}
+                </span>
               </a>
             )}
             {msg.content && (
