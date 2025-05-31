@@ -85,8 +85,8 @@ export const ChatIcon = ({
           fill="none"
           className={className}
         >
-          <rect x={8} y={13.2} width={11} height={1.6} fill="white" />
-          <path d="M15 9L19 14L15 19" stroke="white" strokeWidth={1.6} />
+          <rect x={8} y={13.2} width={11} height={1.6} fill="var(--color-base-100)" />
+          <path d="M15 9L19 14L15 19" stroke="var(--color-base-100)" strokeWidth={1.6} />
         </svg>
       )
     default:
