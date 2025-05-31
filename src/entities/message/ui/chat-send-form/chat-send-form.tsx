@@ -1,6 +1,6 @@
 import { PaperclipIcon } from "@/shared/ui/icons/paper-clip-icon"
 import React, { useRef, useState } from "react"
-import { ChatIcon } from "../chat-messages/ui/chat-icon/chat-icon"
+import { ChatIcon } from "../chat-icon/chat-icon"
 
 export const ChatSendForm = ({
   onSend,

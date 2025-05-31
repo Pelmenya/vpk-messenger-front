@@ -12,8 +12,8 @@ import {
 import { selectMessagesByChatId } from "../../model/chat-selectors"
 import { FC, useEffect } from "react"
 import { ChatDivider } from "../chat-sidebar/chat-divider/chat-divider"
-import { ChatMessages } from "../chat-messages/chat-messages"
-import { ChatSendForm } from "../chat-send-form/chat-send-form"
+import { ChatMessages } from "../../../message/ui/chat-messages/chat-messages"
+import { ChatSendForm } from "../../../message/ui/chat-send-form/chat-send-form"
 
 export const ChatView: FC = () => {
   const { chatId } = useParams<{ chatId: string }>()
@@ -61,6 +61,10 @@ export const ChatView: FC = () => {
     }
   }, [dispatch, chatId])
 
+  const handleSendTextMsg = (text: string) =>
+   {
+    
+  }
   return (
     <div className="flex flex-col h-full w-full">
       <header className="sticky top-0 w-full px-4 z-10">

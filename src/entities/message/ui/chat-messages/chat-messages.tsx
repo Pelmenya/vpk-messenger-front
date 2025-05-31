@@ -3,9 +3,9 @@ import { TMessage } from "@/entities/chat/model/types/t-message"
 import { useAppSelector } from "@/app/hooks"
 import { getUser } from "@/entities/user/model/user-selectors"
 import { IconDownload } from "@tabler/icons-react"
-import { ChatUserAvatar } from "../chat-user-avatar/chat-user-avatar"
-import { ChatHeader } from "./ui/chat-header/chat-header"
-import { ChatFooter } from "./ui/chat-footer/chat-footer"
+import { ChatUserAvatar } from "../../../chat/ui/chat-user-avatar/chat-user-avatar"
+import { ChatHeader } from "../chat-header/chat-header"
+import { ChatFooter } from "../chat-footer/chat-footer"
 
 type TChatMessagesProps = {
   messages: TMessage[]
