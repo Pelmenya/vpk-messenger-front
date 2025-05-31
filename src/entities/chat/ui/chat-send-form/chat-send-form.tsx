@@ -52,7 +52,7 @@ export const ChatSendForm = ({
           <PaperclipIcon className="w-12 h-10" />
         </button>
         {menuOpen && (
-          <div className="absolute left-0 bottom-9 z-20 w-48 bg-base-100 shadow-lg rounded-xl p-2 flex flex-col">
+          <div className="absolute left-0 bottom-9 z-20 w-48 bg-base-100 border border-base-300 shadow-lg rounded-xl p-2 flex flex-col">
             <button
               type="button"
               className="flex items-center px-3 py-2 rounded-lg hover:bg-base-200 mb-2"

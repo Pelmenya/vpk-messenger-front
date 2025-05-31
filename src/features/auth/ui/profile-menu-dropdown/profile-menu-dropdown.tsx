@@ -46,8 +46,8 @@ export const ProfileMenuDropdown: FC<{ user: TUser }> = ({ user }) => {
       >
         <MenuItems
           as="ul"
-          className="absolute z-50 right-0 mt-2 menu p-2 shadow-xl bg-base-100 rounded-box w-52 outline-none ring-0"
-          style={{ border: "none" }}
+          className="absolute z-50 right-0 mt-2 menu p-2 shadow-xl bg-base-100 border border-base-300 rounded-box w-52 outline-none ring-0"
+
         >
           {" "}
           {user
