@@ -1,6 +1,9 @@
 import { useAppDispatch, useAppSelector } from "@/app/hooks"
 import { useParams } from "react-router-dom"
-import { useGetMessagesByChatIdQuery } from "../../api/chat-api"
+import {
+  useGetChatByIdQuery,
+  useGetMessagesByChatIdQuery,
+} from "../../api/chat-api"
 import { getToken } from "@/features/auth/model/auth-selectors"
 import {
   receiveHistoryMessages,
@@ -18,6 +21,14 @@ export const ChatView: FC = () => {
   const token = useAppSelector(getToken)
 
   const { data: dataMessages } = useGetMessagesByChatIdQuery(
+    {
+      chatId: Number(chatId),
+      authKey: String(token),
+    },
+    { refetchOnMountOrArgChange: !!chatId, skip: !chatId },
+  )
+
+  const { data: dataChat } = useGetChatByIdQuery(
     {
       chatId: Number(chatId),
       authKey: String(token),
@@ -53,7 +64,7 @@ export const ChatView: FC = () => {
   return (
     <div className="flex flex-col h-full w-full">
       <header className="sticky top-0 w-full px-4 z-10">
-        <p className="py-4">{chatId}</p>
+        <h2 className="py-4 font-bold text-xl">Чат «{dataChat?.name}»</h2>
         <ChatDivider />
       </header>
       <main className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-base-300 scrollbar-track-transparent">

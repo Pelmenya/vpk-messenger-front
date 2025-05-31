@@ -1,5 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { TChatsResponse } from '../model/types/t-chats-response';
+import { TChat } from '../model/types/t-chat';
 
 export const chatApi = createApi({
     reducerPath: 'chatApi',
@@ -17,8 +18,18 @@ export const chatApi = createApi({
                 },
             }),
         }),
+        getChatById: builder.query<TChat, { chatId: number; authKey: string }>({
+            query: ({ chatId, authKey }) => ({
+                url: `chat/${chatId}`,
+                method: 'GET',
+                credentials: 'include',
+                headers: {
+                    Authorization: 'Bearer ' + authKey,
+                },
+            }),
+        }),
         getMessagesByChatId: builder.query<any, { chatId: number; authKey: string }>({
-            query: ({chatId, authKey}) => ({
+            query: ({ chatId, authKey }) => ({
                 url: `message/${chatId}`,
                 method: 'GET',
                 credentials: 'include',
@@ -34,4 +45,5 @@ export const chatApi = createApi({
 export const {
     useGetChatsQuery,
     useGetMessagesByChatIdQuery,
+    useGetChatByIdQuery,
 } = chatApi;
