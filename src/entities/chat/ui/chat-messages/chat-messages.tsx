@@ -5,6 +5,7 @@ import { getUser } from "@/entities/user/model/user-selectors"
 import { IconDownload } from "@tabler/icons-react"
 import { ChatUserAvatar } from "../chat-user-avatar/chat-user-avatar"
 import { ChatHeader } from "../chat-header/chat-header"
+import { ChatFooter } from "../chat-footer/chat-footer"
 
 type TChatMessagesProps = {
   messages: TMessage[]
@@ -22,14 +23,15 @@ export const ChatMessages: FC<TChatMessagesProps> = ({ messages }) => {
             key={msg.messageId}
             className={`chat ${isMe ? "chat-end" : "chat-start"}`}
           >
+            <ChatHeader displayName={msg?.user?.displayName} />
             <div className="chat-image">
               <ChatUserAvatar
                 displayName={msg?.user?.displayName}
                 profileImageUrl={msg?.user?.profileImageUrl}
               />
             </div>
-            <ChatHeader
-              displayName={msg?.user?.displayName}
+
+            <ChatFooter
               position={msg?.user?.positionName}
               createdAt={msg.createdAt}
             />
