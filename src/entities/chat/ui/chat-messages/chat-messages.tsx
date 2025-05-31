@@ -42,7 +42,7 @@ export const ChatMessages: FC<TChatMessagesProps> = ({ messages }) => {
                   msg.messageImageUrl
                 }
                 alt="chat-img"
-                className="rounded-lg max-w-xs max-h-[240px] mt-2 border"
+                className="rounded-lg max-w-xs max-h-[240px] mt-2 border border-base-300"
               />
             )}
             {msg.messageFileUrl && (

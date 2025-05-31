@@ -19,7 +19,7 @@ export const ChatCard: FC<{ chat: TChat; isActive: boolean }> = ({
       className={cn(
         "h-16 w-full py-1 px-4 my-1 flex justify-between gap-2 transition cursor-pointer",
         {
-          "bg-primary text-primary-content": isActive,
+          "bg-accent text-primary-content": isActive,
           "text-base-content hover:bg-info hover:text-primary-content":
             !isActive,
         },
