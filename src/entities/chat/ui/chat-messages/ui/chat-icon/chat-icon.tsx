@@ -1,5 +1,3 @@
-import React from "react"
-
 type ChatIconType = "add" | "photo" | "file" | "location" | "send"
 
 export const ChatIcon = ({

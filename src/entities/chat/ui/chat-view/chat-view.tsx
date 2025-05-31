@@ -9,7 +9,6 @@ import {
 import { selectMessagesByChatId } from "../../model/chat-selectors"
 import { FC, useEffect } from "react"
 import { ChatDivider } from "../chat-sidebar/chat-divider/chat-divider"
-import { DataJson } from "@/shared/ui/data-json/data-json"
 import { ChatMessages } from "../chat-messages/chat-messages"
 import { ChatSendForm } from "../chat-send-form/chat-send-form"
 
