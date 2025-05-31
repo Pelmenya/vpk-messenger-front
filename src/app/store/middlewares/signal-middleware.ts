@@ -1,7 +1,8 @@
 import { Middleware } from "@reduxjs/toolkit";
 import * as signalR from "@microsoft/signalr";
 import { getToken } from "@/features/auth/model/auth-selectors";
-import { receiveMessage, setConnectionStatus } from "@/entities/chat/model/chat-slice";
+import { receiveMessage } from "@/entities/message/model/message-slice";
+import { setConnectionStatus } from "@/entities/chat/model/chat-slice";
 
 let connection: signalR.HubConnection | null = null;
 

@@ -2,18 +2,15 @@ import { useAppDispatch, useAppSelector } from "@/app/hooks"
 import { useParams } from "react-router-dom"
 import {
   useGetChatByIdQuery,
-  useGetMessagesByChatIdQuery,
 } from "../../api/chat-api"
 import { getToken } from "@/features/auth/model/auth-selectors"
-import {
-  receiveHistoryMessages,
-  clearAllMessages,
-} from "../../model/chat-slice"
-import { selectMessagesByChatId } from "../../model/chat-selectors"
 import { FC, useEffect } from "react"
 import { ChatDivider } from "../chat-sidebar/chat-divider/chat-divider"
 import { ChatMessages } from "../../../message/ui/chat-messages/chat-messages"
 import { ChatSendForm } from "../../../message/ui/chat-send-form/chat-send-form"
+import { useGetMessagesByChatIdQuery } from "@/entities/message/api/message-api"
+import { clearAllMessages, receiveHistoryMessages } from "@/entities/message/model/message-slice"
+import { selectMessagesByChatId } from "@/entities/message/model/message-selectors"
 
 export const ChatView: FC = () => {
   const { chatId } = useParams<{ chatId: string }>()
