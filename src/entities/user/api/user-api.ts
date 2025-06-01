@@ -1,4 +1,4 @@
-import { setBaseApiUrl } from '@/shared/lib/helpers/setBaseApiUrl';
+import { setBaseApiUrl } from '@/shared/lib/helpers/set-base-api-url';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 export const userApi = createApi({

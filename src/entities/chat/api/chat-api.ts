@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { TChatsResponse } from '../model/types/t-chats-response';
 import { TChat } from '../model/types/t-chat';
-import { setBaseApiUrl } from '@/shared/lib/helpers/setBaseApiUrl';
+import { setBaseApiUrl } from '@/shared/lib/helpers/set-base-api-url';
 
 export const chatApi = createApi({
     reducerPath: 'chatApi',

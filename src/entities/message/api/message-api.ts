@@ -1,5 +1,5 @@
 import { TMessage } from '@/entities/chat/model/types/t-message';
-import { setBaseApiUrl } from '@/shared/lib/helpers/setBaseApiUrl';
+import { setBaseApiUrl } from '@/shared/lib/helpers/set-base-api-url';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 export const messageApi = createApi({

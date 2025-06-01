@@ -8,7 +8,7 @@ import { MenuLink } from "./components/menu-link"
 import { logout } from "../../model/auth-slice"
 import { clearUser } from "@/entities/user/model/user-slice"
 import { AUTH_KEY_STORAGE } from "@/app/auth-provider"
-import { setBaseImageUrl } from "@/shared/lib/helpers/setBaseImageUrl"
+import { setBaseImageUrl } from "@/shared/lib/helpers/set-base-image-url"
 
 export const ProfileMenuDropdown: FC<{ user: TUser }> = ({ user }) => {
   const dispatch = useAppDispatch()

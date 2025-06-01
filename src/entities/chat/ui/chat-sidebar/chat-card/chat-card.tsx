@@ -1,5 +1,5 @@
 import { TChat } from "@/entities/chat/model/types/t-chat"
-import { formatChatDate } from "@/shared/lib/helpers/formatChatData"
+import { formatChatDate } from "@/shared/lib/helpers/format-chat-data"
 import { FC } from "react"
 import cn from "classnames"
 import { Link } from "react-router-dom"

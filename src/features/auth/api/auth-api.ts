@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { TRegister } from '../model/types/t-register';
 import { TUserResponse } from '@/entities/user/model/user.entity';
-import { setBaseApiUrl } from '@/shared/lib/helpers/setBaseApiUrl';
+import { setBaseApiUrl } from '@/shared/lib/helpers/set-base-api-url';
 
 type RegisterResponse = {
     message: string;

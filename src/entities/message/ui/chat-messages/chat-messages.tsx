@@ -6,7 +6,7 @@ import { IconDownload } from "@tabler/icons-react"
 import { ChatUserAvatar } from "../../../chat/ui/chat-user-avatar/chat-user-avatar"
 import { ChatHeader } from "../chat-header/chat-header"
 import { ChatFooter } from "../chat-footer/chat-footer"
-import { setBaseImageUrl } from "@/shared/lib/helpers/setBaseImageUrl"
+import { setBaseImageUrl } from "@/shared/lib/helpers/set-base-image-url"
 
 type TChatMessagesProps = {
   messages: TMessage[]

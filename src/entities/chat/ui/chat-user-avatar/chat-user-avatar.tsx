@@ -1,5 +1,5 @@
 import { TUser } from "@/entities/user/model/user.entity"
-import { setBaseImageUrl } from "@/shared/lib/helpers/setBaseImageUrl"
+import { setBaseImageUrl } from "@/shared/lib/helpers/set-base-image-url"
 import { FC } from "react"
 
 export const ChatUserAvatar: FC<Partial<TUser> & { size?: string }> = ({
