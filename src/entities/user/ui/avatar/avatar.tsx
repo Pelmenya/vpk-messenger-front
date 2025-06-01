@@ -9,7 +9,6 @@ import { setUserAvatar } from "../../model/user-slice"
 import { EMPTY_PIC_PLACEHOLDER } from "@/shared/lib/constants/empty-pic-placeholder"
 import { getAvatarBg } from "@/shared/lib/helpers/get-avatar-bg"
 
-
 export const Avatar: FC = () => {
   const user = useAppSelector(getUser)
   const token = useAppSelector(getToken)
@@ -80,11 +79,13 @@ export const Avatar: FC = () => {
           className="flex flex-col items-center gap-6 min-w-[280px]"
           onSubmit={handleSubmit}
         >
-          <label className="block cursor-pointer">
+          <label className="flex flex-col items-center cursor-pointer text-info">
             <div
               className="w-32 h-32 rounded-full bg-gray-200 bg-center bg-cover flex items-center justify-center"
               style={{
-                backgroundImage: preview ? `url(${preview})` : EMPTY_PIC_PLACEHOLDER,
+                backgroundImage: preview
+                  ? `url(${preview})`
+                  : EMPTY_PIC_PLACEHOLDER,
               }}
             />
             <input
@@ -94,7 +95,9 @@ export const Avatar: FC = () => {
               className="hidden"
               onChange={handleFileChange}
             />
+            Нажмите на аватар
           </label>
+
           <button
             type="submit"
             className="btn btn-primary w-full"
@@ -111,7 +114,7 @@ export const Avatar: FC = () => {
           backgroundImage: getAvatarBg(user?.profileImageUrl || ""),
         }}
       >
-        <div className="absolute inset-0 bg-black opacity-40 group-hover:opacity-0 rounded-full transition" />
+        <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-50 rounded-full transition" />
         <span className="absolute inset-0 flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition font-bold">
           Поменять фото
         </span>
