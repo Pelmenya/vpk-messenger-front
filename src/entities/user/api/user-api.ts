@@ -1,9 +1,10 @@
+import { setBaseApiUrl } from '@/shared/lib/helpers/setBaseApiUrl';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 export const userApi = createApi({
     reducerPath: 'userApi',
     baseQuery: fetchBaseQuery({
-        baseUrl: import.meta.env.VITE_BACKEND_BASE_URL + '/user',
+        baseUrl: setBaseApiUrl('/user'),
     }),
     endpoints: (builder) => ({
         getUserById: builder.query<any, { userId: number; authKey: string }>({
@@ -16,7 +17,7 @@ export const userApi = createApi({
                 },
             }),
         }),
-        getUserMe: builder.query<any, {authKey: string }>({
+        getUserMe: builder.query<any, { authKey: string }>({
             query: ({ authKey }) => ({
                 url: 'me',
                 method: 'GET',

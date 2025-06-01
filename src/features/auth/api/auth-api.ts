@@ -1,6 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { TRegister } from '../model/types/t-register';
 import { TUserResponse } from '@/entities/user/model/user.entity';
+import { setBaseApiUrl } from '@/shared/lib/helpers/setBaseApiUrl';
 
 type RegisterResponse = {
     message: string;
@@ -9,7 +10,7 @@ type RegisterResponse = {
 export const authApi = createApi({
     reducerPath: 'authApi',
     baseQuery: fetchBaseQuery({
-        baseUrl: String(import.meta.env.VITE_BACKEND_BASE_URL) + '/auth',
+        baseUrl: setBaseApiUrl('/auth'),
     }),
 
     endpoints: (builder) => ({
