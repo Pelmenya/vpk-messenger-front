@@ -8,6 +8,7 @@ import { MenuLink } from "./components/menu-link"
 import { logout } from "../../model/auth-slice"
 import { clearUser } from "@/entities/user/model/user-slice"
 import { AUTH_KEY_STORAGE } from "@/app/auth-provider"
+import { setBaseImageUrl } from "@/shared/lib/helpers/setBaseImageUrl"
 
 export const ProfileMenuDropdown: FC<{ user: TUser }> = ({ user }) => {
   const dispatch = useAppDispatch()
@@ -26,7 +27,7 @@ export const ProfileMenuDropdown: FC<{ user: TUser }> = ({ user }) => {
             <picture>
               <img
                 className="h-8 w-8 rounded-full"
-                src={import.meta.env.VITE_BACKEND_BASE_IMAGES_URL + user.profileImageUrl}
+                src={setBaseImageUrl(user.profileImageUrl)}
                 alt={user.username}
               />
             </picture>
@@ -47,7 +48,6 @@ export const ProfileMenuDropdown: FC<{ user: TUser }> = ({ user }) => {
         <MenuItems
           as="ul"
           className="absolute z-50 right-0 mt-2 menu p-2 shadow-xl bg-base-100 border border-base-300 rounded-box w-52 outline-none ring-0"
-
         >
           {" "}
           {user
@@ -63,7 +63,6 @@ export const ProfileMenuDropdown: FC<{ user: TUser }> = ({ user }) => {
                           dispatch(logout())
                           localStorage.removeItem(AUTH_KEY_STORAGE)
                           dispatch(clearUser())
-
                         }
                       : undefined
                   }

@@ -1,4 +1,5 @@
 import { TUser } from "@/entities/user/model/user.entity"
+import { setBaseImageUrl } from "@/shared/lib/helpers/setBaseImageUrl"
 import { FC } from "react"
 
 export const ChatUserAvatar: FC<Partial<TUser> & { size?: string }> = ({
@@ -24,7 +25,7 @@ export const ChatUserAvatar: FC<Partial<TUser> & { size?: string }> = ({
           >
             <img
               src={
-                import.meta.env.VITE_BACKEND_BASE_IMAGES_URL + profileImageUrl
+                setBaseImageUrl(profileImageUrl)
               }
               alt={displayName}
               className="w-full h-full object-cover"

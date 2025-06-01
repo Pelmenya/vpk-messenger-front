@@ -1,0 +1,1 @@
+export const setBaseImageUrl = (url: string): string => import.meta.env.VITE_BACKEND_BASE_IMAGES_URL + url;

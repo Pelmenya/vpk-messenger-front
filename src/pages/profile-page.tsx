@@ -1,4 +1,5 @@
 import { ChatIcon } from "@/entities/message/ui/chat-icon/chat-icon"
+import { Avatar } from "@/entities/user/ui/avatar/avatar"
 import { Layout } from "@/shared/ui/layout/layout"
 import { FC } from "react"
 import { Link } from "react-router-dom"
@@ -16,6 +17,8 @@ export const ProfilePage: FC = () => {
             className={`w-7 h-7 rounded rounded-full bg-primary rotate-180 hover:bg-error cursor-pointer`}
           />
         </Link>
+
+        <Avatar />
       </div>
     </Layout>
   )

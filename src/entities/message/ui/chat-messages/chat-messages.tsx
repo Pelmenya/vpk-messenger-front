@@ -6,6 +6,7 @@ import { IconDownload } from "@tabler/icons-react"
 import { ChatUserAvatar } from "../../../chat/ui/chat-user-avatar/chat-user-avatar"
 import { ChatHeader } from "../chat-header/chat-header"
 import { ChatFooter } from "../chat-footer/chat-footer"
+import { setBaseImageUrl } from "@/shared/lib/helpers/setBaseImageUrl"
 
 type TChatMessagesProps = {
   messages: TMessage[]
@@ -43,10 +44,7 @@ export const ChatMessages: FC<TChatMessagesProps> = ({ messages }) => {
             />
             {msg.messageImageUrl && (
               <img
-                src={
-                  import.meta.env.VITE_BACKEND_BASE_IMAGES_URL +
-                  msg.messageImageUrl
-                }
+                src={setBaseImageUrl(msg.messageImageUrl)}
                 alt="chat-img"
                 className="rounded-lg max-w-xs max-h-[240px] mt-2 border border-base-300"
               />
