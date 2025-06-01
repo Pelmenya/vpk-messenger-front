@@ -27,10 +27,23 @@ export const userApi = createApi({
                 },
             }),
         }),
+        putUserAvatar: builder.mutation<{ url: string }, { body: FormData; authKey: string }>({
+            query: ({ body, authKey }) => ({
+                url: 'avatar',
+                method: 'PUT',
+                credentials: 'include',
+                body,
+                headers: {
+                    Authorization: 'Bearer ' + authKey,
+                },
+            }),
+        }),
     }),
 });
 
 export const {
     useGetUserByIdQuery,
+    useGetUserMeQuery,
+    usePutUserAvatarMutation,
     useLazyGetUserMeQuery,
 } = userApi;

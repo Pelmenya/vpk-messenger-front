@@ -20,7 +20,12 @@ export const userSlice = createSlice({
     clearUser(state) {
       state.user = null;
     },
+    setUserAvatar(state, action: PayloadAction<string>) {
+      if (state.user) {
+        state.user.profileImageUrl = action.payload;
+      }
+    }
   },
 });
 
-export const { setUser, clearUser } = userSlice.actions;
+export const { setUser, clearUser, setUserAvatar } = userSlice.actions;
