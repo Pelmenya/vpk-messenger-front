@@ -1,6 +1,6 @@
 import { ChatIcon } from "@/entities/message/ui/chat-icon/chat-icon"
 import { Avatar } from "@/entities/user/ui/avatar/avatar"
-import { ProfileEditForm } from "@/entities/user/ui/prifil-edit-form/profile-edit-form"
+import { ProfileEditForm } from "@/entities/user/ui/profile-edit-form/profile-edit-form"
 import { Layout } from "@/shared/ui/layout/layout"
 import { FC } from "react"
 import { Link } from "react-router-dom"

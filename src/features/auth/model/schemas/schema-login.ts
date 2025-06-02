@@ -5,7 +5,7 @@ export const schemaLogin = yup.object().shape({
   username: yup
     .string()
     .min(3, "Имя должно содержать не менее 3 символов")
-    .max(20, "Имя не должно превышать 20 символов")
+    .max(50, "Имя не должно превышать 50 символов")
     .required("Имя обязательно"),
   password: yup
     .string()
