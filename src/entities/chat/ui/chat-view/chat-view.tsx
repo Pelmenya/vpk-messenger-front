@@ -2,7 +2,7 @@ import { useAppDispatch, useAppSelector } from "@/app/hooks"
 import { useParams } from "react-router-dom"
 import { useGetChatByIdQuery } from "../../api/chat-api"
 import { getToken } from "@/features/auth/model/auth-selectors"
-import { FC, useEffect } from "react"
+import { FC, useEffect, useState } from "react"
 import { ChatDivider } from "../chat-sidebar/chat-divider/chat-divider"
 import { ChatMessages } from "../../../message/ui/chat-messages/chat-messages"
 import { ChatSendForm } from "../../../message/ui/chat-send-form/chat-send-form"
@@ -15,11 +15,16 @@ import { selectMessagesByChatId } from "@/entities/message/model/message-selecto
 import { setSelectedChatId } from "../../model/chat-slice"
 import { ChatSettings } from "../chat-settings/chat-settings"
 import { ChatAvatar } from "../chat-avatar/chat-avatar"
+import { Modal } from "@/shared/ui/modal/modal"
+import { useGetOtherUsersQuery } from "@/entities/user/api/user-api"
+import { ChatUsersSelect } from "../chat-users-select/chat-users-select"
 
 export const ChatView: FC = () => {
   const { chatId } = useParams<{ chatId: string }>()
   const dispatch = useAppDispatch()
   const token = useAppSelector(getToken)
+
+  const [isOpenUserModal, setIsOpenUserModal] = useState<boolean>(false)
 
   const { data: dataMessages } = useGetMessagesByChatIdQuery(
     {
@@ -29,11 +34,12 @@ export const ChatView: FC = () => {
     { refetchOnMountOrArgChange: !!chatId, skip: !chatId },
   )
 
-  const { data: dataChat } = useGetChatByIdQuery(
-    {
-      chatId: Number(chatId),
-      authKey: String(token),
-    },
+  const { data: dataChat, isLoading: isLoadingChat } = useGetChatByIdQuery(
+    { chatId: Number(chatId), authKey: String(token) },
+    { refetchOnMountOrArgChange: !!chatId, skip: !chatId },
+  )
+  const { data: dataUsers, isLoading: isLoadingUsers } = useGetOtherUsersQuery(
+    { authKey: String(token) },
     { refetchOnMountOrArgChange: !!chatId, skip: !chatId },
   )
 
@@ -67,7 +73,7 @@ export const ChatView: FC = () => {
   }, [dispatch, chatId, token])
 
   const handleOnUserConfig = () => {
-    alert("Open popup")
+    setIsOpenUserModal(true)
   }
 
   return (
@@ -88,6 +94,22 @@ export const ChatView: FC = () => {
         <ChatDivider />
         <ChatSendForm />
       </footer>
+      <Modal
+        isOpen={isOpenUserModal}
+        handlerClose={() => setIsOpenUserModal(false)}
+      >
+        <ChatUsersSelect
+          chatId={Number(chatId)}
+          users={dataUsers}
+          participants={dataChat?.participants}
+          isLoading={isLoadingUsers || isLoadingChat}
+          onSave={async userIds => {
+            // await apiUpdateChatUsers({ chatId, userIds, token }); // ваш запрос
+            setIsOpenUserModal(false)
+          }}
+          onClose={() => setIsOpenUserModal(false)}
+        />
+      </Modal>
     </div>
   )
 }

@@ -1,4 +1,5 @@
 export type TParticipant = {
   userId: number;
-  userName: string;
+  username: string;
+  displayName: string;
 };

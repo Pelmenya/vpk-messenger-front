@@ -1,6 +1,7 @@
 import { setBaseApiUrl } from '@/shared/lib/helpers/set-base-api-url';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { TUserUpdateDto } from '../model/types/t-user-update.dto';
+import { TParticipant } from '@/entities/chat/model/types/t-participant';
 
 export const userApi = createApi({
     reducerPath: 'userApi',
@@ -21,6 +22,16 @@ export const userApi = createApi({
         getUserMe: builder.query<any, { authKey: string }>({
             query: ({ authKey }) => ({
                 url: 'me',
+                method: 'GET',
+                credentials: 'include',
+                headers: {
+                    Authorization: 'Bearer ' + authKey,
+                },
+            }),
+        }),
+        getOtherUsers: builder.query<TParticipant[], { authKey: string }>({
+            query: ({ authKey }) => ({
+                url: 'other-users',
                 method: 'GET',
                 credentials: 'include',
                 headers: {
@@ -56,6 +67,7 @@ export const userApi = createApi({
 export const {
     useGetUserByIdQuery,
     useGetUserMeQuery,
+    useGetOtherUsersQuery,
     usePutUserAvatarMutation,
     usePutUserMutation,
     useLazyGetUserMeQuery,
