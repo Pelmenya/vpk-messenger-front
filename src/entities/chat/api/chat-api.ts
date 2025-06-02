@@ -29,6 +29,21 @@ export const chatApi = createApi({
                 },
             }),
         }),
+        putChatById: builder.mutation<any, { chatId: number; name: string; participants: number[]; authKey: string }>({
+            query: ({ chatId, name, participants, authKey }) => ({
+                url: `${chatId}`,
+                method: 'PUT',
+                credentials: 'include',
+                body: {
+                    name,
+                    participants
+                },
+                headers: {
+                    Authorization: 'Bearer ' + authKey,
+                },
+            }),
+        }),
+
 
     }),
 });
@@ -36,4 +51,5 @@ export const chatApi = createApi({
 export const {
     useGetChatsQuery,
     useGetChatByIdQuery,
+    usePutChatByIdMutation,
 } = chatApi;

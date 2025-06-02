@@ -14,7 +14,6 @@ export type TModalProps = {
   isOpen: boolean
   handlerClose: () => void
   children?: JSX.Element
-  sizeCloseBtn?: "sm" | "md" | "lg" | "xs"
 }
 
 export const Modal = ({
@@ -22,7 +21,6 @@ export const Modal = ({
   isOpen,
   handlerClose,
   children,
-  sizeCloseBtn = "md",
 }: TModalProps) => {
   return (
     <Transition appear show={isOpen} as={Fragment}>
@@ -59,14 +57,13 @@ export const Modal = ({
                     { "flex flex-col items-end": !title },
                   )}
                 >
-                  <DialogTitle as="h3" className="text-3xl font-bold leading-6">
+                  <DialogTitle as="h3" className="text-2xl font-bold leading-6">
                     {title}
                   </DialogTitle>
                   <button
                     onClick={handlerClose}
                     className={cn(
-                      "btn btn-circle btn-outline btn-sm md:btn-md",
-                      `btn-${sizeCloseBtn}`,
+                      "btn btn-circle btn-outline btn-sm",
                     )}
                   >
                     <CrossIcon />

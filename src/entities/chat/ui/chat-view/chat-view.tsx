@@ -1,6 +1,6 @@
 import { useAppDispatch, useAppSelector } from "@/app/hooks"
 import { useParams } from "react-router-dom"
-import { useGetChatByIdQuery } from "../../api/chat-api"
+import { useGetChatByIdQuery, usePutChatByIdMutation } from "../../api/chat-api"
 import { getToken } from "@/features/auth/model/auth-selectors"
 import { FC, useEffect, useState } from "react"
 import { ChatDivider } from "../chat-sidebar/chat-divider/chat-divider"
@@ -25,9 +25,10 @@ export const ChatView: FC = () => {
   const { chatId } = useParams<{ chatId: string }>()
   const dispatch = useAppDispatch()
   const token = useAppSelector(getToken)
-  const user = useAppSelector(getUser);
+  const user = useAppSelector(getUser)
 
-  const [isOpenUserModal, setIsOpenUserModal] = useState<boolean>(false)
+  const [isOpenUserModal, setIsOpenUserModal] = useState(false)
+  const [saveError, setSaveError] = useState<string | null>(null)
 
   const { data: dataMessages } = useGetMessagesByChatIdQuery(
     {
@@ -37,11 +38,19 @@ export const ChatView: FC = () => {
     { refetchOnMountOrArgChange: !!chatId, skip: !chatId },
   )
 
-  const { data: dataChat, isLoading: isLoadingChat } = useGetChatByIdQuery(
+  const {
+    data: dataChat,
+    refetch: refetchChats,
+    isLoading: isLoadingChat,
+  } = useGetChatByIdQuery(
     { chatId: Number(chatId), authKey: String(token) },
     { refetchOnMountOrArgChange: !!chatId, skip: !chatId },
   )
-  const { data: dataUsers, isLoading: isLoadingUsers } = useGetOtherUsersQuery(
+  const {
+    data: dataUsers,
+    refetch: refetchUsers,
+    isLoading: isLoadingUsers,
+  } = useGetOtherUsersQuery(
     { authKey: String(token) },
     { refetchOnMountOrArgChange: !!chatId, skip: !chatId },
   )
@@ -49,6 +58,8 @@ export const ChatView: FC = () => {
   const allMessages = useAppSelector(state =>
     selectMessagesByChatId(state, Number(chatId)),
   )
+
+  const [putChatById, { isLoading: isSaving }] = usePutChatByIdMutation()
 
   // История сообщений
   useEffect(() => {
@@ -77,17 +88,36 @@ export const ChatView: FC = () => {
 
   const handleOnUserConfig = () => {
     setIsOpenUserModal(true)
+    setSaveError(null)
+  }
+
+  const handleSaveParticipants = async (userIds: number[]) => {
+    try {
+      setSaveError(null)
+      await putChatById({
+        chatId: Number(chatId),
+        name: dataChat?.name || '',
+        participants: [...userIds.map(userId => userId), user?.userId || 0],
+        authKey: String(token),
+      }).unwrap()
+      await refetchUsers()
+      await refetchChats()
+      setIsOpenUserModal(false)
+    } catch {
+      setSaveError("Ошибка при сохранении участников!")
+    }
   }
 
   return (
     <div className="flex flex-col h-full w-full">
       <header className="sticky top-0 w-full px-4 z-10 flex items-center justify-between gap-2 bg-base-100 py-4">
         <div className="flex items-center gap-3">
-          {/* Аватар */}
           <ChatAvatar name={dataChat?.name} />
           <span className="font-bold text-lg">{dataChat?.name || "Чат"}</span>
         </div>
-        {user?.userType.typeName === EUserType.Admin && <ChatSettings onUserConfig={handleOnUserConfig} />}
+        {user?.userType.typeName === EUserType.Admin && (
+          <ChatSettings onUserConfig={handleOnUserConfig} />
+        )}
       </header>
       <ChatDivider />
       <main className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-base-300 scrollbar-track-transparent">
@@ -98,6 +128,7 @@ export const ChatView: FC = () => {
         <ChatSendForm />
       </footer>
       <Modal
+        title="Выберите участников чата"
         isOpen={isOpenUserModal}
         handlerClose={() => setIsOpenUserModal(false)}
       >
@@ -106,10 +137,9 @@ export const ChatView: FC = () => {
           users={dataUsers}
           participants={dataChat?.participants}
           isLoading={isLoadingUsers || isLoadingChat}
-          onSave={async userIds => {
-            // await apiUpdateChatUsers({ chatId, userIds, token }); // ваш запрос
-            setIsOpenUserModal(false)
-          }}
+          isSaving={isSaving}
+          saveError={saveError}
+          onSave={handleSaveParticipants}
           onClose={() => setIsOpenUserModal(false)}
         />
       </Modal>

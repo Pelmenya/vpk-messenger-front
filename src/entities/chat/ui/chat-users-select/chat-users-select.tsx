@@ -1,17 +1,13 @@
 import { FC, useEffect, useState } from "react"
 import { TParticipant } from "../../model/types/t-participant"
 
-type TUser = {
-  userId: number
-  username: string
-  displayName: string
-}
-
 type Props = {
   chatId: number
-  users?: TUser[] // все пользователи
-  participants?: TParticipant[] // участники чата
+  users?: TParticipant[]           // все пользователи
+  participants?: TParticipant[]    // участники чата
   isLoading: boolean
+  isSaving?: boolean
+  saveError?: string | null
   onSave: (userIds: number[]) => void
   onClose: () => void
 }
@@ -20,14 +16,16 @@ export const ChatUsersSelect: FC<Props> = ({
   users,
   participants,
   isLoading,
+  isSaving,
+  saveError,
   onSave,
   onClose,
 }) => {
-  // Список id пользователей, уже в чате
+  // Получаем список id уже присутствующих в чате
   const participantsIds = participants?.map(p => p.userId) ?? []
-  const [selectedUserIds, setSelectedUserIds] =
-    useState<number[]>(participantsIds)
+  const [selectedUserIds, setSelectedUserIds] = useState<number[]>(participantsIds)
 
+  // Сброс выбранных при изменении участников
   useEffect(() => {
     setSelectedUserIds(participantsIds)
   }, [JSON.stringify(participantsIds)])
@@ -36,7 +34,7 @@ export const ChatUsersSelect: FC<Props> = ({
     setSelectedUserIds(prev =>
       prev.includes(userId)
         ? prev.filter(id => id !== userId)
-        : [...prev, userId],
+        : [...prev, userId]
     )
   }
 
@@ -45,8 +43,7 @@ export const ChatUsersSelect: FC<Props> = ({
   }
 
   return (
-    <div className="w-full max-w-md mx-auto min-h-[380px] flex flex-col">
-      <h2 className="text-xl font-bold mb-8">Выберите участников чата</h2>
+    <div className="w-full mt-8 max-w-md mx-auto min-h-[380px] flex flex-col">
       <div className="space-y-2 max-h-72 flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-base-300 scrollbar-track-transparent">
         {isLoading && (
           <>
@@ -75,9 +72,10 @@ export const ChatUsersSelect: FC<Props> = ({
                 className="checkbox checkbox-primary"
                 checked={selectedUserIds.includes(user.userId)}
                 onChange={() => handleToggle(user.userId)}
+                disabled={isSaving}
               />
               <span>
-                {user.displayName || user.username}
+                {user.displayName}
                 <span className="ml-2 text-xs text-base-content/60">
                   @{user.username}
                 </span>
@@ -85,16 +83,23 @@ export const ChatUsersSelect: FC<Props> = ({
             </label>
           ))}
       </div>
-      <div className="flex justify-end gap-2 mt-6">
-        <button className="btn btn-ghost" onClick={onClose}>
+      {saveError && (
+        <div className="text-error text-sm mt-2">
+          {saveError}
+        </div>
+      )}
+      <div className="flex justify-end gap-2 mt-8">
+        <button className="btn btn-ghost" onClick={onClose} disabled={isSaving}>
           Отмена
         </button>
         <button
           className="btn btn-primary"
           onClick={handleSave}
-          disabled={isLoading}
+          disabled={isLoading || isSaving}
         >
-          Сохранить
+          {isSaving
+            ? <span className="loading loading-spinner"></span>
+            : "Сохранить"}
         </button>
       </div>
     </div>
