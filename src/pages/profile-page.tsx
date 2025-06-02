@@ -18,9 +18,11 @@ export const ProfilePage: FC = () => {
             className={`w-7 h-7 rounded rounded-full bg-primary rotate-180 hover:bg-error cursor-pointer`}
           />
         </Link>
-        <div className="w-full h-full flex flex-col items-center justify-center gap-12">
-            <Avatar />
-            <ProfileEditForm />
+        <div className="w-full h-full flex flex-col items-center justify-center">
+            <div className="flex flex-col items-center justify-center gap-10 max-w-md">
+              <Avatar />
+              <ProfileEditForm />
+            </div>
         </div>
         
       </div>

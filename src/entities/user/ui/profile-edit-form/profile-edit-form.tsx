@@ -1,37 +1,26 @@
-import { useAppDispatch } from "@/app/hooks"
+import { useAppDispatch, useAppSelector } from "@/app/hooks"
 import { useState, useEffect } from "react"
 import { useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
-import { useNavigate } from "react-router-dom"
 import {
   useLazyGetUserMeQuery,
   usePutUserMutation,
 } from "@/entities/user/api/user-api"
 import { setUser } from "@/entities/user/model/user-slice"
-import { AUTH_KEY_STORAGE } from "@/app/auth-provider"
 import { TUserUpdateDto } from "../../model/types/t-user-update.dto"
 import { schemaProfileEdit } from "../../model/schemas/schema-profile-edit"
 import { FormWithTitle } from "@/shared/ui/form-with-title/form-with-title"
 import { InputField } from "@/shared/ui/input-field/input-field"
 import { TNullable } from "@/shared/types/t-nullable"
+import { getToken } from "@/features/auth/model/auth-selectors"
 
 export const ProfileEditForm = () => {
   const dispatch = useAppDispatch()
-  const navigate = useNavigate()
+  const token = useAppSelector(getToken);
 
   const [resError, setResError] = useState<TNullable<string>>(null)
   const [putUser, { isLoading: isSaving }] = usePutUserMutation()
   const [fetchUserMe, { isLoading: isProfileLoading }] = useLazyGetUserMeQuery()
-
-  // Получаем токен из localStorage
-  const token = (() => {
-    try {
-      const stored = localStorage.getItem(AUTH_KEY_STORAGE)
-      return stored ? JSON.parse(stored).token : null
-    } catch {
-      return null
-    }
-  })()
 
   const {
     register,
@@ -53,20 +42,20 @@ export const ProfileEditForm = () => {
 
   // Подгружаем профиль пользователя для автозаполнения
   useEffect(() => {
-    if (!token) return
-    fetchUserMe({ authKey: token })
-      .unwrap()
-      .then(data => {
+    const fetchProfile = async () => {
+      if (!token) return
+      try {
+        const data = await fetchUserMe({ authKey: token }).unwrap()
         setValue("displayName", data.displayName || "")
         setValue("email", data.email || null)
         setValue("phoneNumber", data.phoneNumber || null)
         setValue("bio", data.bio || null)
-        setValue(
-          "birthDate",
-          data.birthDate ? data.birthDate.slice(0, 10) : null,
-        )
-      })
-      .catch(() => setResError("Не удалось загрузить профиль"))
+        setValue("birthDate", data.birthDate ? data.birthDate.slice(0, 10) : null)
+      } catch {
+        setResError("Не удалось загрузить профиль")
+      }
+    }
+    fetchProfile()
   }, [token, fetchUserMe, setValue])
 
   const onSubmit = async (data: TUserUpdateDto) => {
@@ -76,17 +65,10 @@ export const ProfileEditForm = () => {
       return
     }
     try {
-      // Преобразуем пустые строки в null для nullable-полей
-      const prepared: TUserUpdateDto = {
-        ...data,
-        email: data.email?.trim() === "" ? null : data.email,
-        phoneNumber: data.phoneNumber?.trim() === "" ? null : data.phoneNumber,
-        bio: data.bio?.trim() === "" ? null : data.bio,
-        birthDate: data.birthDate?.trim() === "" ? null : data.birthDate,
-      }
-      const res = await putUser({ body: prepared, authKey: token }).unwrap()
-      if (res) dispatch(setUser(res))
-      navigate("/profile")
+      await putUser({ body: data, authKey: token }).unwrap()
+      // После успешного обновления профиля — получаем свежую версию профиля
+      const actualUser = await fetchUserMe({ authKey: token }).unwrap()
+      dispatch(setUser(actualUser))
     } catch (error: any) {
       setResError(error?.data?.message || "Ошибка при сохранении")
     }
