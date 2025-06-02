@@ -81,11 +81,6 @@ export const ProfileEditForm = () => {
       title="Редактирование профиля"
       onSubmit={handleSubmit(onSubmit)}
       submitButtonText="Сохранить"
-      formLink={{
-        label: "Вернуться",
-        href: "/profile",
-        text: "Назад",
-      }}
     >
       <InputField
         type="text"
