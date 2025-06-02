@@ -30,7 +30,7 @@ export const ChatView: FC = () => {
   const [isOpenUserModal, setIsOpenUserModal] = useState(false)
   const [saveError, setSaveError] = useState<string | null>(null)
 
-  const { data: dataMessages } = useGetMessagesByChatIdQuery(
+  const { data: dataMessages, refetch: refetchMessages } = useGetMessagesByChatIdQuery(
     {
       chatId: Number(chatId),
       authKey: String(token),
@@ -102,6 +102,7 @@ export const ChatView: FC = () => {
       }).unwrap()
       await refetchUsers()
       await refetchChats()
+      await refetchMessages()
       setIsOpenUserModal(false)
     } catch {
       setSaveError("Ошибка при сохранении участников!")

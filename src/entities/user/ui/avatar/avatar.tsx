@@ -8,6 +8,7 @@ import { usePutUserAvatarMutation } from "../../api/user-api"
 import { setUserAvatar } from "../../model/user-slice"
 import { EMPTY_PIC_PLACEHOLDER } from "@/shared/lib/constants/empty-pic-placeholder"
 import { getAvatarBg } from "@/shared/lib/helpers/get-avatar-bg"
+import { TNullable } from "@/shared/types/t-nullable"
 
 export const Avatar: FC = () => {
   const user = useAppSelector(getUser)
@@ -16,9 +17,7 @@ export const Avatar: FC = () => {
   const dispatch = useAppDispatch()
 
   const [isOpen, setIsOpen] = useState(false)
-  const [preview, setPreview] = useState<string>(
-    setBaseImageUrl(user?.profileImageUrl || ""),
-  )
+  const [preview, setPreview] = useState<TNullable<string>>(null)
   const [file, setFile] = useState<File | null>(null)
   const fileInputRef = useRef<HTMLInputElement | null>(null)
   const [putUserAvatar, { isLoading }] = usePutUserAvatarMutation()
@@ -26,7 +25,11 @@ export const Avatar: FC = () => {
   // Сброс preview при открытии модалки
   useEffect(() => {
     if (isOpen) {
-      setPreview(setBaseImageUrl(user?.profileImageUrl || ""))
+      
+      if (user?.profileImageUrl) {
+        console.log(user?.profileImageUrl)
+        setPreview(setBaseImageUrl(user?.profileImageUrl))
+      }
       setFile(null)
       if (fileInputRef.current) fileInputRef.current.value = ""
     }
@@ -34,7 +37,11 @@ export const Avatar: FC = () => {
 
   // Ловим внешнюю смену profileImageUrl
   useEffect(() => {
-    if (!isOpen) setPreview(setBaseImageUrl(user?.profileImageUrl || ""))
+    if (!isOpen) {
+      if (user?.profileImageUrl) {
+        setPreview(setBaseImageUrl(user?.profileImageUrl))
+      }
+    }
   }, [user?.profileImageUrl, isOpen])
 
   const handleOpen = () => setIsOpen(true)
@@ -73,7 +80,7 @@ export const Avatar: FC = () => {
   }
 
   return (
-    <>
+    <div>
       <Modal isOpen={isOpen} handlerClose={handleClose} title="Загрузите файл">
         <form
           className="flex flex-col items-center gap-6 min-w-[280px]"
@@ -119,6 +126,6 @@ export const Avatar: FC = () => {
           Поменять фото
         </span>
       </div>
-    </>
+    </div>
   )
 }
