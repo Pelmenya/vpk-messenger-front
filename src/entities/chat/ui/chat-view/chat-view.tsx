@@ -13,6 +13,8 @@ import {
 } from "@/entities/message/model/message-slice"
 import { selectMessagesByChatId } from "@/entities/message/model/message-selectors"
 import { setSelectedChatId } from "../../model/chat-slice"
+import { ChatSettings } from "../chat-settings/chat-settings"
+import { ChatAvatar } from "../chat-avatar/chat-avatar"
 
 export const ChatView: FC = () => {
   const { chatId } = useParams<{ chatId: string }>()
@@ -64,16 +66,25 @@ export const ChatView: FC = () => {
     }
   }, [dispatch, chatId, token])
 
+  const handleOnUserConfig = () => {
+    alert("Open popup")
+  }
+
   return (
     <div className="flex flex-col h-full w-full">
-      <header className="sticky top-0 w-full px-4 z-10">
-        <h2 className="py-4 font-bold text-xl">Чат «{dataChat?.name}»</h2>
-        <ChatDivider />
+      <header className="sticky top-0 w-full px-4 z-10 flex items-center justify-between gap-2 bg-base-100 py-4">
+        <div className="flex items-center gap-3">
+          {/* Аватар */}
+          <ChatAvatar name={dataChat?.name} />
+          <span className="font-bold text-lg">{dataChat?.name || "Чат"}</span>
+        </div>
+        <ChatSettings onUserConfig={handleOnUserConfig} />
       </header>
+      <ChatDivider />
       <main className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-base-300 scrollbar-track-transparent">
         <ChatMessages messages={allMessages} />
       </main>
-      <footer className="sticky top-0 w-full px-4 z-10">
+      <footer className="sticky bottom-0 w-full px-4 z-10 bg-base-100">
         <ChatDivider />
         <ChatSendForm />
       </footer>

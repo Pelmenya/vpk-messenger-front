@@ -52,6 +52,7 @@ export const ChatSendForm = ({
             hover:text-primary
             focus:text-primary
             active:text-primary
+            cursor-pointer
           `}
           aria-label="Добавить ресурс"
           onClick={() => setMenuOpen(v => !v)}
