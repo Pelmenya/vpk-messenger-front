@@ -33,7 +33,7 @@ export const InputField = <T extends FieldValues>({
                     {...register(name)}
                     id={name}
                     placeholder={placeholder}
-                    className="input w-full input-primary min-h-[60px] scrollbar-thin scrollbar-thumb-base-300 scrollbar-track-transparent"
+                    className="textarea textarea-primary w-full scrollbar-thin scrollbar-thumb-base-300 scrollbar-track-transparent"
                     maxLength={maxLength}
                 />
             ) : (
