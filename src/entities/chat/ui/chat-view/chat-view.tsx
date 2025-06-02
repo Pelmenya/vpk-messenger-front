@@ -18,11 +18,14 @@ import { ChatAvatar } from "../chat-avatar/chat-avatar"
 import { Modal } from "@/shared/ui/modal/modal"
 import { useGetOtherUsersQuery } from "@/entities/user/api/user-api"
 import { ChatUsersSelect } from "../chat-users-select/chat-users-select"
+import { getUser } from "@/entities/user/model/user-selectors"
+import { EUserType } from "@/entities/user/model/user.entity"
 
 export const ChatView: FC = () => {
   const { chatId } = useParams<{ chatId: string }>()
   const dispatch = useAppDispatch()
   const token = useAppSelector(getToken)
+  const user = useAppSelector(getUser);
 
   const [isOpenUserModal, setIsOpenUserModal] = useState<boolean>(false)
 
@@ -84,7 +87,7 @@ export const ChatView: FC = () => {
           <ChatAvatar name={dataChat?.name} />
           <span className="font-bold text-lg">{dataChat?.name || "Чат"}</span>
         </div>
-        <ChatSettings onUserConfig={handleOnUserConfig} />
+        {user?.userType.typeName === EUserType.Admin && <ChatSettings onUserConfig={handleOnUserConfig} />}
       </header>
       <ChatDivider />
       <main className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-base-300 scrollbar-track-transparent">

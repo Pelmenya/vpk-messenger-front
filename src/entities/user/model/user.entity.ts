@@ -17,7 +17,7 @@ export type TUser = {
     createdAt: string;
     lastLoginAt: TNullable<string>;
     positionName: TNullable<string>;
-    userType: EUserType;
+    userType: { typeId: number; typeName: EUserType };
 };
 
 
