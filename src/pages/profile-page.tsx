@@ -8,23 +8,27 @@ import { Link } from "react-router-dom"
 export const ProfilePage: FC = () => {
   return (
     <Layout isViewHeader={true}>
-      <div className="w-full h-full max-w-7xl mx-auto flex bg-base-100">
+      <div className="w-full h-full max-w-7xl flex bg-base-100">
+        {/* Левая колонка с иконкой чата */}
         <Link
           to="/chats"
           className="flex items-center justify-center px-4 bg-base-200"
         >
           <ChatIcon
             type="send"
-            className={`w-7 h-7 rounded rounded-full bg-primary rotate-180 hover:bg-error cursor-pointer`}
+            className="w-7 h-7 rounded rounded-full bg-primary rotate-180 hover:bg-error cursor-pointer"
           />
         </Link>
-        <div className="w-full h-full flex flex-col items-center justify-center">
-            <div className="flex flex-col items-center justify-center gap-10 max-w-md">
+        {/* Правая часть - профиль */}
+        <div className="w-full h-full flex flex-col overflow-y-auto scrollbar-thin scrollbar-thumb-base-300 scrollbar-track-transparent">
+          <div className="flex flex-col items-center gap-8 max-w-md mx-auto py-8 px-2 sm:py-12">
+            {/* Responsive размер аватара */}
+            <div className="w-28 h-28 sm:w-36 sm:h-36">
               <Avatar />
-              <ProfileEditForm />
             </div>
+            <ProfileEditForm />
+          </div>
         </div>
-        
       </div>
     </Layout>
   )

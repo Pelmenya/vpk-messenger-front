@@ -73,7 +73,7 @@ export const Avatar: FC = () => {
   }
 
   return (
-    <div>
+    <>
       <Modal isOpen={isOpen} handlerClose={handleClose} title="Загрузите файл">
         <form
           className="flex flex-col items-center gap-6 min-w-[280px]"
@@ -119,6 +119,6 @@ export const Avatar: FC = () => {
           Поменять фото
         </span>
       </div>
-    </div>
+    </>
   )
 }
