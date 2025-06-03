@@ -11,7 +11,7 @@ import {
   useGetChatsQuery,
 } from "@/entities/chat/api/chat-api"
 import { getToken } from "@/features/auth/model/auth-selectors"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { getSelectedChatId } from "@/entities/chat/model/chat-selectors"
 import { getUser } from "@/entities/user/model/user-selectors"
 import { EUserType } from "@/entities/user/model/user.entity"
@@ -21,6 +21,7 @@ export const ChatCard: FC<{ chat: TChat; isActive: boolean }> = ({
   isActive,
 }) => {
   const dispatch = useAppDispatch()
+  const navigate = useNavigate();
   const [confirmOpen, setConfirmOpen] = useState(false)
   const [error, setError] = useState<string>("")
   const [deleteChat, { isLoading }] = useDeleteChatByIdMutation()
@@ -39,6 +40,7 @@ export const ChatCard: FC<{ chat: TChat; isActive: boolean }> = ({
       // сбрасываем выбранный чат, если удалили его
       if (selectedChatId === chat.chatId) {
         dispatch(setSelectedChatId(null))
+        navigate('/chats')
       } else {
         dispatch(setSelectedChatId(selectedChatId))
       }
