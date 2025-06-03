@@ -9,11 +9,14 @@ import { TNullable } from "@/shared/types/t-nullable"
 import { usePostChatMutation } from "../../api/chat-api"
 import { TChatCreateDto } from "../../model/types/t-chat-create.dto"
 import { schemaChatCreate } from "../../model/schemas/schema-chat-create"
+import { getUser } from "@/entities/user/model/user-selectors"
 
 export const ChatCreateForm: FC<{ onSuccess?: () => void }> = ({
   onSuccess,
 }) => {
   const token = useAppSelector(getToken)
+  const user = useAppSelector(getUser)
+
   const [postChat, { isLoading }] = usePostChatMutation()
   const [resError, setResError] = useState<TNullable<string>>(null)
 
@@ -34,7 +37,11 @@ export const ChatCreateForm: FC<{ onSuccess?: () => void }> = ({
   const onSubmit = async (data: TChatCreateDto) => {
     setResError(null)
     try {
-      await postChat({ name: data.name, authKey: token! }).unwrap()
+      await postChat({
+        name: data.name,
+        participants: [user?.userId || 0],
+        authKey: token!,
+      }).unwrap()
       reset()
       onSuccess?.()
     } catch (e: any) {

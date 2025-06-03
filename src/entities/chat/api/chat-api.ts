@@ -43,7 +43,7 @@ export const chatApi = createApi({
                 },
             }),
         }),
-        postChat: builder.mutation<any, { name: string; authKey: string }>({
+        postChat: builder.mutation<any, { name: string;  participants: number[]; authKey: string }>({
             query: ({ name, authKey }) => ({
                 url: '',
                 method: 'POST',
