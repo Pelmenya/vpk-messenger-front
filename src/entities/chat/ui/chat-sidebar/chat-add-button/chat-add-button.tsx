@@ -7,9 +7,9 @@ interface Props {
 
 export const ChatAddButton: FC<Props> = ({ onClick }) => (
   <div className="flex items-center gap-4 px-4 pb-2 justify-end">
-    <span className="text-min">Добавить чат</span>
+    <button onClick={onClick} className="text-min cursor-pointer">Добавить чат</button>
     <button
-      className="btn btn-circle btn-ghost w-10 h-10 min-h-0 p-0 text-[#999] hover:text-primary
+      className="btn btn-circle btn-ghost btn-sm text-[#999] hover:text-primary
             hover:bg-base-300 outline-none ring-0 focus:ring-0 active:ring-0 focus:outline-none active:outline-none
             flex items-center justify-center"
       type="button"
