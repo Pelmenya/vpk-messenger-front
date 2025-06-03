@@ -4,6 +4,7 @@ import { getToken } from "@/features/auth/model/auth-selectors";
 import { setConnectionStatus } from "@/entities/chat/model/chat-slice";
 import { receiveMessage } from "@/entities/message/model/message-slice";
 import { TMessage } from "@/entities/chat/model/types/t-message";
+import { fixBackendDate } from "@/shared/lib/helpers/fix-backend-date";
 
 type ChatConnectAction = {
     type: "chat/connect";
@@ -47,7 +48,12 @@ export const signalrMiddleware: Middleware = store => next => async (action) => 
             .build();
 
         connection.on("ReceiveMessage", (message: TMessage) => {
-            store.dispatch(receiveMessage({ chatId, message }));
+            // Клонируем объект, чтобы не мутировать оригинал
+            const fixedMessage = {
+                ...message,
+                createdAt: fixBackendDate(message.createdAt),
+            };
+            store.dispatch(receiveMessage({ chatId, message: fixedMessage }));
         });
 
         connection.onreconnected(() => store.dispatch(setConnectionStatus("connected")));
