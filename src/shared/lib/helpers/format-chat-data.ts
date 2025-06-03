@@ -19,8 +19,8 @@ export const formatChatDate = (date?: string) => {
 
   if (isThisWeek(parsedDate, { weekStartsOn: 1 })) {
     // 'eeee' — полное название дня недели на русском
-    return format(parsedDate, 'eeee', { locale: ru });
+    return format(parsedDate, 'eeee, HH:MM', { locale: ru });
   }
 
-  return format(parsedDate, "d MMMM yyyy", { locale: ru });
+  return format(parsedDate, "d MMMM yyyy, HH:MM", { locale: ru });
 };

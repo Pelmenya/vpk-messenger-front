@@ -1,3 +1,4 @@
+import { formatChatDate } from "@/shared/lib/helpers/format-chat-data"
 import { FC } from "react"
 
 type TChatFooterProps = {
@@ -6,10 +7,10 @@ type TChatFooterProps = {
 }
 
 export const ChatFooter: FC<TChatFooterProps> = ({ position, createdAt }) => (
-  <div className="chat-footer mt-1 flex flex-col items-start gap-0.5">
+  <div className="chat-footer mt-1 flex flex-col items-end gap-0.5">
     {position && <span className="badge badge-xs badge-info">{position}</span>}
     <time className="text-xs opacity-50">
-      {new Date(createdAt).toLocaleString()}
+      {formatChatDate(createdAt)}
     </time>
   </div>
 )
