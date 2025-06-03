@@ -23,7 +23,7 @@ export const ChatCard: FC<{ chat: TChat; isActive: boolean }> = ({
   const [error, setError] = useState<string>("")
   const [deleteChat, { isLoading }] = useDeleteChatByIdMutation()
   const token = useAppSelector(getToken)
-  const selectedChatId = useAppSelector(getSelectedChatId);
+  const selectedChatId = useAppSelector(getSelectedChatId)
 
   const { refetch: refetchChats } = useGetChatsQuery(token!, { skip: !token })
 
@@ -36,6 +36,8 @@ export const ChatCard: FC<{ chat: TChat; isActive: boolean }> = ({
       // сбрасываем выбранный чат, если удалили его
       if (selectedChatId === chat.chatId) {
         dispatch(setSelectedChatId(null))
+      } else {
+        dispatch(setSelectedChatId(selectedChatId))
       }
     } catch (e: any) {
       setError(
@@ -48,51 +50,49 @@ export const ChatCard: FC<{ chat: TChat; isActive: boolean }> = ({
 
   return (
     <>
-      <div
+      <Link
+        to={`/chats/${chat.chatId}`}
         className={cn(
-          "h-16 w-full py-1 px-4 my-1 flex justify-between gap-2 transition items-center",
+          "h-16 w-full py-1 px-4 my-1 flex flex-col justify-between gap-2 rounded transition cursor-pointer group relative",
           {
             "bg-accent text-primary-content": isActive,
             "text-base-content hover:bg-info hover:text-primary-content":
               !isActive,
           },
         )}
+        onClick={() => dispatch(setSelectedChatId(chat.chatId))}
       >
-        <Link
-          to={`/chats/${chat.chatId}`}
-          className="flex flex-col w-full h-full justify-between flex-1 min-w-0"
-          onClick={() => dispatch(setSelectedChatId(chat.chatId))}
-        >
-          <div className="flex items-center justify-between w-full">
-            <h6 className="text-sm font-semibold max-w-[80%] truncate">
-              {chat.name}
-            </h6>
+        <div className="flex">
+          <div className="flex flex-col justify-between flex-1 min-w-0">
+              <h6 className="text-sm font-semibold max-w-[100%] truncate">
+                {chat.name}
+              </h6>
           </div>
-          <p className="text-ex-min text-right px-1">
-            {formatChatDate(chat.createdAt)}
-          </p>
-        </Link>
-        <div
-          className="tooltip tooltip-left tooltip-warning flex items-center"
-          data-tip="Удалить чат"
-        >
-          <button
-            className="btn btn-circle btn-ghost btn-xs hover:text-primary
-              hover:bg-base-300 outline-none ring-0 focus:ring-0 active:ring-0 focus:outline-none active:outline-none
-              flex items-center justify-center"
-            type="button"
-            aria-label="Удалить чат"
-            tabIndex={0}
-            onClick={e => {
-              e.stopPropagation()
-              setError("") // сбрасываем ошибку при открытии
-              setConfirmOpen(true)
-            }}
+          <div
+            className="tooltip tooltip-left tooltip-warning flex items-center"
+            data-tip="Удалить чат"
           >
-            <IconBucket size={16} />
-          </button>
+            <button
+              className="btn btn-circle btn-ghost btn-xs hover:text-primary hover:bg-base-300 outline-none
+              flex items-center justify-center z-10"
+              type="button"
+              aria-label="Удалить чат"
+              tabIndex={0}
+              onClick={e => {
+                e.preventDefault() // чтобы не переходить по ссылке
+                e.stopPropagation()
+                setError("")
+                setConfirmOpen(true)
+              }}
+            >
+              <IconBucket size={16} />
+            </button>
+          </div>
         </div>
-      </div>
+        <p className="text-ex-min text-right px-1 truncate">
+          {formatChatDate(chat.createdAt)}
+        </p>
+      </Link>
       <ConfirmDialog
         title="Удалить чат?"
         description={`Вы уверены, что хотите удалить чат ${chat.name}? Это действие нельзя отменить.`}
