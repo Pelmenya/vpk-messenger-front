@@ -6,7 +6,7 @@ import { getToken } from "@/features/auth/model/auth-selectors"
 import { FormWithTitle } from "@/shared/ui/form-with-title/form-with-title"
 import { InputField } from "@/shared/ui/input-field/input-field"
 import { TNullable } from "@/shared/types/t-nullable"
-import { usePostChatMutation } from "../../api/chat-api"
+import { usePostChatMutation, usePutChatByIdMutation } from "../../api/chat-api"
 import { TChatCreateDto } from "../../model/types/t-chat-create.dto"
 import { schemaChatCreate } from "../../model/schemas/schema-chat-create"
 import { getUser } from "@/entities/user/model/user-selectors"
@@ -18,6 +18,7 @@ export const ChatCreateForm: FC<{ onSuccess?: () => void }> = ({
   const user = useAppSelector(getUser)
 
   const [postChat, { isLoading }] = usePostChatMutation()
+  const [putChat, { isLoading: isLoadingUpdate }] = usePutChatByIdMutation()
   const [resError, setResError] = useState<TNullable<string>>(null)
 
   const {
@@ -37,11 +38,17 @@ export const ChatCreateForm: FC<{ onSuccess?: () => void }> = ({
   const onSubmit = async (data: TChatCreateDto) => {
     setResError(null)
     try {
-      await postChat({
+      const chat = await postChat({
         name: data.name,
         participants: [user?.userId || 0],
         authKey: token!,
       }).unwrap()
+      await putChat({
+        chatId: chat.chatId,
+        name: data.name,
+        participants: [user?.userId || 0],
+        authKey: token!,
+      })
       reset()
       onSuccess?.()
     } catch (e: any) {
@@ -55,7 +62,7 @@ export const ChatCreateForm: FC<{ onSuccess?: () => void }> = ({
       onSubmit={handleSubmit(onSubmit)}
       submitButtonText="Создать"
       error={resError}
-      isLoading={isLoading}
+      isLoading={isLoading || isLoadingUpdate}
     >
       <InputField
         type="text"
