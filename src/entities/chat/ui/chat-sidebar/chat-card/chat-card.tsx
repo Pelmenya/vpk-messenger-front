@@ -13,6 +13,8 @@ import {
 import { getToken } from "@/features/auth/model/auth-selectors"
 import { Link } from "react-router-dom"
 import { getSelectedChatId } from "@/entities/chat/model/chat-selectors"
+import { getUser } from "@/entities/user/model/user-selectors"
+import { EUserType } from "@/entities/user/model/user.entity"
 
 export const ChatCard: FC<{ chat: TChat; isActive: boolean }> = ({
   chat,
@@ -24,6 +26,7 @@ export const ChatCard: FC<{ chat: TChat; isActive: boolean }> = ({
   const [deleteChat, { isLoading }] = useDeleteChatByIdMutation()
   const token = useAppSelector(getToken)
   const selectedChatId = useAppSelector(getSelectedChatId)
+  const user = useAppSelector(getUser)
 
   const { refetch: refetchChats } = useGetChatsQuery(token!, { skip: !token })
 
@@ -64,30 +67,32 @@ export const ChatCard: FC<{ chat: TChat; isActive: boolean }> = ({
       >
         <div className="flex">
           <div className="flex flex-col justify-between flex-1 min-w-0">
-              <h6 className="text-sm font-semibold max-w-[100%] truncate">
-                {chat.name}
-              </h6>
+            <h6 className="text-sm font-semibold max-w-[100%] truncate">
+              {chat.name}
+            </h6>
           </div>
-          <div
-            className="tooltip tooltip-left tooltip-warning flex items-center"
-            data-tip="Удалить чат"
-          >
-            <button
-              className="btn btn-circle btn-ghost btn-xs hover:text-primary hover:bg-base-300 outline-none
-              flex items-center justify-center z-10"
-              type="button"
-              aria-label="Удалить чат"
-              tabIndex={0}
-              onClick={e => {
-                e.preventDefault() // чтобы не переходить по ссылке
-                e.stopPropagation()
-                setError("")
-                setConfirmOpen(true)
-              }}
+          {user?.userType.typeName === EUserType.Admin && (
+            <div
+              className="tooltip tooltip-left tooltip-warning flex items-center"
+              data-tip="Удалить чат"
             >
-              <IconBucket size={16} />
-            </button>
-          </div>
+              <button
+                className="btn btn-circle btn-ghost btn-xs hover:text-primary hover:bg-base-300 outline-none
+              flex items-center justify-center z-10"
+                type="button"
+                aria-label="Удалить чат"
+                tabIndex={0}
+                onClick={e => {
+                  e.preventDefault() // чтобы не переходить по ссылке
+                  e.stopPropagation()
+                  setError("")
+                  setConfirmOpen(true)
+                }}
+              >
+                <IconBucket size={16} />
+              </button>
+            </div>
+          )}
         </div>
         <p className="text-ex-min text-right px-1 truncate">
           {formatChatDate(chat.createdAt)}
