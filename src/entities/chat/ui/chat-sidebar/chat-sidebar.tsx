@@ -5,10 +5,10 @@ import { getToken } from "@/features/auth/model/auth-selectors"
 import { getUser } from "@/entities/user/model/user-selectors"
 import { ChatList } from "./chat-list/chat-list"
 import { Loading } from "@/shared/ui/loading/loading"
-import { IconPlus } from "@tabler/icons-react"
 import { Modal } from "@/shared/ui/modal/modal"
 import { ChatCreateForm } from "../chat-create-form/chat-create-form"
 import { EUserType } from "@/entities/user/model/user.entity"
+import { ChatAddButton } from "./chat-add-button/chat-add-button"
 
 export const ChatSidebar: FC<{ header?: JSX.Element }> = ({ header }) => {
   const token = useAppSelector(getToken)
@@ -49,20 +49,7 @@ export const ChatSidebar: FC<{ header?: JSX.Element }> = ({ header }) => {
         {header}
       </div>
       {user.userType.typeName === EUserType.Admin && (
-        <div className="flex items-center gap-4 px-4 pb-2 justify-end">
-          <span className="text-sm">Создать чат</span>
-          <button
-            className="
-                  btn btn-circle btn-ghost w-10 h-10 min-h-0 p-0 text-[#999] hover:text-primary
-                  hover:bg-base-300 outline-none
-                  flex items-center justify-center"
-            type="button"
-            aria-label="Добавить чат"
-            onClick={() => setIsOpenCreatChatModal(true)}
-          >
-            <IconPlus size={22} />
-          </button>
-        </div>
+        <ChatAddButton onClick={() => setIsOpenCreatChatModal(true)} />
       )}
 
       {/* Список чатов скроллируемый */}
