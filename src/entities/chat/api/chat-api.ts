@@ -56,6 +56,16 @@ export const chatApi = createApi({
                 },
             }),
         }),
+        deleteChatById: builder.mutation<any, { chatId: number; authKey: string }>({
+            query: ({ chatId, authKey }) => ({
+                url: `${chatId}`,
+                method: 'DELETE',
+                credentials: 'include',
+                headers: {
+                    Authorization: 'Bearer ' + authKey,
+                },
+            }),
+        }),
 
 
     }),
@@ -66,4 +76,5 @@ export const {
     useGetChatByIdQuery,
     usePutChatByIdMutation,
     usePostChatMutation,
+    useDeleteChatByIdMutation,
 } = chatApi;
