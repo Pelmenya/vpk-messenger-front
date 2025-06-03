@@ -17,9 +17,18 @@ export const ChatMessages: FC<TChatMessagesProps> = ({ messages }) => {
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    // Скроллим в самый низ при изменении сообщений
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
   }, [messages])
+
+  if (messages.length === 0) {
+    return (
+      <div className="w-full h-full flex flex-1 items-center justify-center p-8">
+        <span className="text-center text-lg">
+          Нет сообщений в чате
+        </span>
+      </div>
+    )
+  }
 
   return (
     <div className="flex flex-col gap-4 p-4">
@@ -71,7 +80,6 @@ export const ChatMessages: FC<TChatMessagesProps> = ({ messages }) => {
           </div>
         )
       })}
-      {/* Этот div будет референсом для прокрутки */}
       <div ref={messagesEndRef} />
     </div>
   )
