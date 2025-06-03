@@ -23,9 +23,7 @@ export const ChatMessages: FC<TChatMessagesProps> = ({ messages }) => {
   if (messages.length === 0) {
     return (
       <div className="w-full h-full flex flex-1 items-center justify-center p-8">
-        <span className="text-center text-lg">
-          Нет сообщений в чате
-        </span>
+        <span className="text-center text-lg">Нет сообщений в чате</span>
       </div>
     )
   }
@@ -50,7 +48,9 @@ export const ChatMessages: FC<TChatMessagesProps> = ({ messages }) => {
             <ChatFooter
               position={msg?.user?.positionName}
               createdAt={msg.createdAt}
+              isMe={isMe} // <-- добавили
             />
+
             {msg.messageImageUrl && (
               <img
                 src={setBaseImageUrl(msg.messageImageUrl)}
