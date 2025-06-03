@@ -13,10 +13,11 @@ export const ChatList: FC<{ chats: TChatsResponse }> = ({
 
   return (
     <ul className="flex flex-col w-full">
+      <ChatDivider />
       {chats.map(chat => (
         <li key={chat.chatId}>
-          <ChatDivider />
           <ChatCard chat={chat} isActive={currentChatId === chat.chatId} />
+          <ChatDivider />
         </li>
       ))}
     </ul>

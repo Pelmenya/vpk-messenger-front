@@ -43,6 +43,19 @@ export const chatApi = createApi({
                 },
             }),
         }),
+        postChat: builder.mutation<any, { name: string; authKey: string }>({
+            query: ({ name, authKey }) => ({
+                url: '',
+                method: 'POST',
+                credentials: 'include',
+                body: {
+                    name,
+                },
+                headers: {
+                    Authorization: 'Bearer ' + authKey,
+                },
+            }),
+        }),
 
 
     }),
@@ -52,4 +65,5 @@ export const {
     useGetChatsQuery,
     useGetChatByIdQuery,
     usePutChatByIdMutation,
+    usePostChatMutation,
 } = chatApi;
