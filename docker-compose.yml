@@ -1,0 +1,9 @@
+services:
+  vpk_messenger_front:
+    build: ./
+    container_name: vpk_messenger_front
+    ports:
+      - "${PORT:-8080}:80"
+    environment:
+      - NODE_ENV=production
+    # volumes: не нужен, всё уже внутри контейнера!
