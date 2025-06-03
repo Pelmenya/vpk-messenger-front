@@ -14,7 +14,7 @@ export const formatChatDate = (date?: string) => {
   const parsedDate = typeof date === 'string' ? parseISO(date) : date;
 
   if (isToday(parsedDate)) {
-    return format(parsedDate, 'HH:mm', { locale: ru });
+    return format(parsedDate, 'HH:mm:ss', { locale: ru });
   }
 
   if (isThisWeek(parsedDate, { weekStartsOn: 1 })) {
