@@ -8,7 +8,7 @@ import { ChatHeader } from "../chat-header/chat-header"
 import { ChatFooter } from "../chat-footer/chat-footer"
 import { setBaseImageUrl } from "@/shared/lib/helpers/set-base-image-url"
 import { Map } from "@/shared/ui/map/map"
-import { extractCoordinates, locationRegex } from "@/shared/lib/constants/location.regex"
+import { extractCoordinates } from "@/shared/lib/helpers/extract-coordinates"
 
 type TChatMessagesProps = {
   messages: TMessage[]
