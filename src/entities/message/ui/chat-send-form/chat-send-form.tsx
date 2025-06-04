@@ -41,7 +41,6 @@ export const ChatSendForm = ({
   // Отправка файла или фото
   const handleFileChange = async (
     e: React.ChangeEvent<HTMLInputElement>,
-    type: "photo" | "file"
   ) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -148,13 +147,13 @@ export const ChatSendForm = ({
           accept="image/*"
           className="hidden"
           ref={photoInputRef}
-          onChange={e => handleFileChange(e, "photo")}
+          onChange={e => handleFileChange(e)}
         />
         <input
           type="file"
           className="hidden"
           ref={fileInputRef}
-          onChange={e => handleFileChange(e, "file")}
+          onChange={e => handleFileChange(e)}
         />
       </div>
       {/* input для сообщения */}
