@@ -60,8 +60,8 @@ export const ChatMessages: FC<TChatMessagesProps> = ({ messages }) => {
             )}
             {msg.messageFileUrl && (
               <a
-                href={msg.messageFileUrl}
-                download={msg.messageFileName || undefined}
+                href={setBaseImageUrl(msg.messageFileUrl)}
+                download={setBaseImageUrl(msg.messageFileName || '')}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="link link-primary flex items-center gap-1 mt-2"
