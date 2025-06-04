@@ -33,6 +33,24 @@ export const messageApi = createApi({
 
             }),
         }),
+        sendFileMessage: builder.mutation<any, { chatId: number; file: File; authKey: string }>(
+            {
+                query: ({ chatId, file, authKey }) => {
+                    const formData = new FormData();
+                    formData.append("file", file);
+                    return {
+                        url: `file/${chatId}`,
+                        method: "POST",
+                        credentials: "include",
+                        body: formData,
+                        headers: {
+                            Authorization: "Bearer " + authKey,
+                            // 'Content-Type' не ставить вручную для FormData!
+                        },
+                    };
+                },
+            }
+        ),
 
     }),
 });
@@ -40,4 +58,5 @@ export const messageApi = createApi({
 export const {
     useGetMessagesByChatIdQuery,
     useSendTextMessageMutation,
+    useSendFileMessageMutation,
 } = messageApi;

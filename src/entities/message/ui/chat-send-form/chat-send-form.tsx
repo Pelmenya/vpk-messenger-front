@@ -4,11 +4,15 @@ import { ChatIcon } from "../chat-icon/chat-icon"
 import { useAppDispatch, useAppSelector } from "@/app/hooks"
 import { getSelectedChatId } from "@/entities/chat/model/chat-selectors"
 import { getToken } from "@/features/auth/model/auth-selectors"
+import {
+  useSendFileMessageMutation,
+} from "@/entities/message/api/message-api" // исправьте путь, если другой
 
+// Для текстовых сообщений используем signalR middleware через dispatch
 export const ChatSendForm = ({
   iconColor = "text-primary",
 }: {
-  iconColor?: string // tailwind класс для управления цветом
+  iconColor?: string
 }) => {
   const dispatch = useAppDispatch();
   const chatId = useAppSelector(getSelectedChatId)
@@ -17,17 +21,62 @@ export const ChatSendForm = ({
   const [message, setMessage] = useState("")
   const [menuOpen, setMenuOpen] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
-  
-  
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    if (message.trim().length > 1) {
-      if (chatId && token) {
-        dispatch({ type: "chat/sendMessage", payload: { chatId, message: message.trim() } });
-        setMessage("")
-      }
-      inputRef.current?.focus()
+  const photoInputRef = useRef<HTMLInputElement>(null)
+  const fileInputRef = useRef<HTMLInputElement>(null)
+
+  const [sendFileMessage, { isLoading: isFileLoading }] = useSendFileMessageMutation()
+
+  // Открытие input'а для фото
+  const handlePhotoClick = () => {
+    photoInputRef.current?.click();
+    setMenuOpen(false);
+  }
+
+  // Открытие input'а для файлов
+  const handleFileClick = () => {
+    fileInputRef.current?.click();
+    setMenuOpen(false);
+  }
+
+  // Отправка файла или фото
+  const handleFileChange = async (
+    e: React.ChangeEvent<HTMLInputElement>,
+    type: "photo" | "file"
+  ) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (!chatId || !token) return;
+
+    try {
+      await sendFileMessage({
+        chatId,
+        file,
+        authKey: token,
+      }).unwrap();
+      // Новое сообщение с файлом придет по SignalR автоматически!
+    } catch (e) {
+      alert("Ошибка загрузки файла");
     }
+    e.target.value = ""; // сброс input, чтобы можно было снова выбрать тот же файл
+  };
+
+  // Отправка текстового сообщения через SignalR middleware
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (message.trim().length < 2) return;
+    if (!chatId || !token) return;
+
+    // Используем Redux action для SignalR
+    dispatch({
+      type: "chat/sendMessage",
+      payload: {
+        chatId,
+        message:  message.trim(),
+      }
+    });
+
+    setMessage("");
+    inputRef.current?.focus();
   }
 
   return (
@@ -65,6 +114,8 @@ export const ChatSendForm = ({
             <button
               type="button"
               className="flex items-center px-3 py-2 rounded-lg hover:bg-base-200 mb-2"
+              onClick={handlePhotoClick}
+              disabled={isFileLoading}
             >
               <ChatIcon type="photo" className={`w-6 h-6 mr-3 ${iconColor}`} />
               <span className="text-base-content">Фото</span>
@@ -72,6 +123,8 @@ export const ChatSendForm = ({
             <button
               type="button"
               className="flex items-center px-3 py-2 rounded-lg hover:bg-base-200 mb-2"
+              onClick={handleFileClick}
+              disabled={isFileLoading}
             >
               <ChatIcon type="file" className={`w-6 h-6 mr-3 ${iconColor}`} />
               <span className="text-base-content">Файл</span>
@@ -79,6 +132,7 @@ export const ChatSendForm = ({
             <button
               type="button"
               className="flex items-center px-3 py-2 rounded-lg hover:bg-base-200"
+              disabled
             >
               <ChatIcon
                 type="location"
@@ -88,6 +142,20 @@ export const ChatSendForm = ({
             </button>
           </div>
         )}
+        {/* Скрытые input'ы для файлов и фото */}
+        <input
+          type="file"
+          accept="image/*"
+          className="hidden"
+          ref={photoInputRef}
+          onChange={e => handleFileChange(e, "photo")}
+        />
+        <input
+          type="file"
+          className="hidden"
+          ref={fileInputRef}
+          onChange={e => handleFileChange(e, "file")}
+        />
       </div>
       {/* input для сообщения */}
       <input
@@ -102,20 +170,19 @@ export const ChatSendForm = ({
         value={message}
         onChange={e => setMessage(e.target.value)}
         onFocus={() => setMenuOpen(false)}
+        disabled={isFileLoading}
       />
       {/* Кнопка отправки */}
       <button
         type="submit"
         className="btn btn-primary btn-circle flex items-center justify-center"
         tabIndex={0}
-        disabled={message.trim().length < 2}
+        disabled={message.trim().length < 2 || isFileLoading}
       >
-        {
-          <ChatIcon
-            type="send"
-            className={`w-7 h-7 rounded rounded-full ${message.trim().length < 2 ? "bg-none" : iconColor}`}
-          />
-        }
+        <ChatIcon
+          type="send"
+          className={`w-7 h-7 rounded rounded-full ${message.trim().length < 2 ? "bg-none" : iconColor}`}
+        />
       </button>
     </form>
   )
