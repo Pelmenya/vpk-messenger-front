@@ -89,6 +89,32 @@ export const ChatSendForm = ({
     inputRef.current?.focus()
   }
 
+  const handleSendLocation = () => {
+    if (!chatId || !token) return
+
+    if (!navigator.geolocation) {
+      alert("Геолокация не поддерживается вашим браузером.")
+      return
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      position => {
+        const { latitude, longitude } = position.coords
+        // Шлем, например, как "[location]55.7558,37.6173"
+        dispatch({
+          type: "chat/sendMessage",
+          payload: {
+            chatId,
+            message: `[location]${latitude},${longitude}`,
+          },
+        })
+      },
+      error => {
+        alert("Не удалось получить локацию: " + error.message)
+      },
+    )
+  }
+
   return (
     <form
       className="flex w-full items-center gap-2 bg-base-100 py-3 rounded-t-lg"
@@ -97,10 +123,7 @@ export const ChatSendForm = ({
     >
       {/* Кнопка добавить ресурс */}
       <div className="relative">
-        <button 
-          className="btn btn-ghost btn-circle"
-          type="button" 
-          tabIndex={0}>
+        <button className="btn btn-ghost btn-circle" type="button" tabIndex={0}>
           <div
             className={`
             mr-4
@@ -148,7 +171,8 @@ export const ChatSendForm = ({
             <button
               type="button"
               className="flex items-center px-3 py-2 rounded-lg hover:bg-base-200 cursor-pointer"
-              disabled
+              onClick={handleSendLocation}
+              disabled={isFileLoading}
             >
               <ChatIcon
                 type="location"

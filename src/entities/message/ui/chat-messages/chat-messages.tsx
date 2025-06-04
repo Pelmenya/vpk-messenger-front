@@ -7,6 +7,8 @@ import { ChatUserAvatar } from "../../../chat/ui/chat-user-avatar/chat-user-avat
 import { ChatHeader } from "../chat-header/chat-header"
 import { ChatFooter } from "../chat-footer/chat-footer"
 import { setBaseImageUrl } from "@/shared/lib/helpers/set-base-image-url"
+import { Map } from "@/shared/ui/map/map"
+import { extractCoordinates, locationRegex } from "@/shared/lib/constants/location.regex"
 
 type TChatMessagesProps = {
   messages: TMessage[]
@@ -27,7 +29,7 @@ export const ChatMessages: FC<TChatMessagesProps> = ({ messages }) => {
       </div>
     )
   }
-
+console.log(extractCoordinates('[location]54.89186859130859,38.06544876098633'))
   return (
     <div className="flex flex-col gap-4 p-4">
       {messages.map(msg => {
@@ -44,13 +46,11 @@ export const ChatMessages: FC<TChatMessagesProps> = ({ messages }) => {
                 profileImageUrl={msg?.user?.profileImageUrl}
               />
             </div>
-
             <ChatFooter
               position={msg?.user?.positionName}
               createdAt={msg.createdAt}
               isMe={isMe} // <-- добавили
             />
-
             {msg.messageImageUrl && (
               <img
                 src={setBaseImageUrl(msg.messageImageUrl)}
@@ -61,7 +61,7 @@ export const ChatMessages: FC<TChatMessagesProps> = ({ messages }) => {
             {msg.messageFileUrl && (
               <a
                 href={setBaseImageUrl(msg.messageFileUrl)}
-                download={setBaseImageUrl(msg.messageFileName || '')}
+                download={setBaseImageUrl(msg.messageFileName || "")}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="link link-primary flex items-center gap-1 mt-2"
@@ -72,11 +72,25 @@ export const ChatMessages: FC<TChatMessagesProps> = ({ messages }) => {
                 </span>
               </a>
             )}
-            {msg.content && (
-              <div className="chat-bubble whitespace-pre-line">
-                {msg.content}
-              </div>
-            )}
+            {(() => {
+              const coords = msg.content
+                ? extractCoordinates(msg.content)
+                : null
+              if (coords) {
+                return (
+                  <div className="chat-bubble p-0 overflow-hidden">
+                    <Map coordinates={coords} zoom={15} />
+                  </div>
+                )
+              }
+              return (
+                msg.content && (
+                  <div className="chat-bubble whitespace-pre-line">
+                    {msg.content}
+                  </div>
+                )
+              )
+            })()}
           </div>
         )
       })}
