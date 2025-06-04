@@ -108,9 +108,11 @@ export const ChatSendForm = ({
             message: `[location]${latitude},${longitude}`,
           },
         })
+        setMenuOpen(false)
       },
       error => {
         alert("Не удалось получить локацию: " + error.message)
+        setMenuOpen(false)
       },
     )
   }
