@@ -29,7 +29,7 @@ export const ChatMessages: FC<TChatMessagesProps> = ({ messages }) => {
       </div>
     )
   }
-console.log(extractCoordinates('[location]54.89186859130859,38.06544876098633'))
+
   return (
     <div className="flex flex-col gap-4 p-4">
       {messages.map(msg => {
