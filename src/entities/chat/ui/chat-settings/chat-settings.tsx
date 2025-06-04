@@ -12,7 +12,7 @@ export const ChatSettings: FC<TChatSettingsProps> = ({
   return (
       <button
         type="button"
-        className="btn btn-circle btn-ghost w-10 h-10 min-h-0 p-0 text-[#999] hover:text-primary
+        className="btn btn-circle btn-ghost text-[#999] hover:text-primary
                   focus:text-primary
                   active:text-primary
                   hover:bg-base-100 

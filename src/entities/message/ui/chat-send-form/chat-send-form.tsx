@@ -129,7 +129,7 @@ export const ChatSendForm = ({
           <div className="absolute bottom-12 left-0 z-20 w-48 bg-base-100 border border-base-300 shadow-lg rounded-xl p-2 flex flex-col">
             <button
               type="button"
-              className="flex items-center px-3 py-2 rounded-lg hover:bg-base-200 mb-2"
+              className="flex items-center cursor-pointer px-3 py-2 rounded-lg hover:bg-base-200 mb-2"
               onClick={handlePhotoClick}
               disabled={isFileLoading}
             >
@@ -138,7 +138,7 @@ export const ChatSendForm = ({
             </button>
             <button
               type="button"
-              className="flex items-center px-3 py-2 rounded-lg hover:bg-base-200 mb-2"
+              className="flex items-center px-3 py-2 rounded-lg hover:bg-base-200 mb-2 cursor-pointer"
               onClick={handleFileClick}
               disabled={isFileLoading}
             >
@@ -147,7 +147,7 @@ export const ChatSendForm = ({
             </button>
             <button
               type="button"
-              className="flex items-center px-3 py-2 rounded-lg hover:bg-base-200"
+              className="flex items-center px-3 py-2 rounded-lg hover:bg-base-200 cursor-pointer"
               disabled
             >
               <ChatIcon
