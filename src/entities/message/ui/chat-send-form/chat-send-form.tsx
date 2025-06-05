@@ -9,8 +9,6 @@ import { ChatEmojiPicker } from "../chat-emoji-picker/chat-emoji-picker"
 import { Spinner } from "@/shared/ui/spiner/spiner"
 import { getBestLocation } from "@/shared/lib/helpers/get-best-location"
 
-
-
 export const ChatSendForm = ({
   iconColor = "text-primary",
 }: {
@@ -163,33 +161,29 @@ export const ChatSendForm = ({
     >
       {/* Кнопка добавить ресурс */}
       <div className="relative">
-        <button className="btn btn-ghost btn-circle" type="button" tabIndex={0}>
+        <button
+          className="btn btn-ghost btn-circle"
+          type="button"
+          tabIndex={0}
+          onClick={() => {
+            setMenuOpen(v => !v)
+            setShowEmoji(false)
+          }}
+        >
           <div
             className={`
-            mr-4
-            ml-4
-            h-7 w-7
-            flex items-center justify-center
-            transition-colors
-            focus:outline-none
-            text-[#999]
-            hover:text-primary
-            focus:text-primary
-            active:text-primary
-            cursor-pointer
-          `}
+              mr-4 ml-4 h-7 w-7 flex items-center justify-center
+              transition-colors focus:outline-none text-[#999]
+              hover:text-primary focus:text-primary active:text-primary
+              cursor-pointer
+            `}
             aria-label="Добавить ресурс"
-            onClick={() => {
-              setMenuOpen(v => !v)
-              setShowEmoji(false)
-            }}
-            onBlur={() => setTimeout(() => setMenuOpen(false), 150)}
           >
             <PaperclipIcon className="w-12 h-10" />
           </div>
         </button>
         {menuOpen && (
-          <div className="absolute bottom-12 left-0 z-20 w-56 bg-base-100 border border-base-300 shadow-lg rounded-xl p-2 flex flex-col">
+          <div className="absolute bottom-12 left-0 z-20 max-w-62 bg-base-100 border border-base-300 shadow-lg rounded-xl p-2 flex flex-col">
             <button
               type="button"
               className="flex items-center cursor-pointer px-3 py-2 rounded-lg hover:bg-base-200 mb-2"
@@ -208,45 +202,55 @@ export const ChatSendForm = ({
               <ChatIcon type="file" className={`w-6 h-6 mr-3 ${iconColor}`} />
               <span className="text-base-content">Файл</span>
             </button>
-            <button
-              type="button"
-              className="flex items-center px-3 py-2 rounded-lg hover:bg-base-200 cursor-pointer relative"
-              onClick={handleSendLocation}
-              disabled={isFileLoading || locating}
-            >
-              <ChatIcon
-                type="location"
-                className={`w-6 h-6 mr-3 ${iconColor}`}
-              />
-              <span className="text-base-content flex items-center">
-                Локация
-                {locating && (
-                  <span className="ml-2 flex items-center animate-fade-in">
-                    <Spinner />
-                    <span className="ml-1 text-xs text-base-content/80 tabular-nums select-none">
-                      {locCountdown}s
-                    </span>
-                    {locAccuracy !== null && (
-                      <span className="ml-1 text-xs text-base-content/60 select-none">
-                        {Math.round(locAccuracy)}м
-                      </span>
-                    )}
-                    <button
-                      type="button"
-                      title="Отмена"
-                      onClick={e => {
-                        e.stopPropagation()
-                        handleCancelLocation()
-                      }}
-                      className="ml-2 w-6 h-6 flex items-center justify-center rounded-full text-lg text-error bg-base-200 hover:bg-error/10 transition-colors focus:outline-none border border-transparent hover:border-error"
-                      style={{ lineHeight: 1 }}
-                    >
-                      ×
-                    </button>
+            {/* Кнопка локации и отмена */}
+            <div className="flex items-center px-3 py-2 rounded-lg hover:bg-base-200 relative">
+              <button
+                type="button"
+                className="flex items-center w-full cursor-pointer"
+                onClick={locating ? handleCancelLocation : handleSendLocation}
+                disabled={isFileLoading}
+                style={{
+                  background: "none",
+                  border: "none",
+                  padding: 0,
+                  margin: 0,
+                  boxShadow: "none",
+                  width: "100%",
+                  cursor: "pointer",
+                }}
+              >
+                {locating ? (
+                  <span
+                    tabIndex={-1}
+                    className="w-6 h-6 mr-3 flex items-center justify-center rounded-full text-lg text-error bg-base-200 hover:bg-error/10 transition-colors border border-transparent hover:border-error focus-visible:outline-none"
+                    style={{ lineHeight: 1, cursor: "pointer" }}
+                  >
+                    ×
                   </span>
+                ) : (
+                  <ChatIcon
+                    type="location"
+                    className={`w-6 h-6 mr-3 ${iconColor}`}
+                  />
                 )}
-              </span>
-            </button>
+                <span className="text-base-content flex items-center">
+                  Локация
+                  {locating && (
+                    <span className="ml-2 flex items-center animate-fade-in">
+                      <Spinner />
+                      <span className="ml-1 text-xs text-base-content/80 tabular-nums select-none">
+                        {locCountdown}s
+                      </span>
+                      {locAccuracy !== null && (
+                        <span className="ml-1 text-xs text-base-content/60 select-none">
+                          {Math.round(locAccuracy)}м
+                        </span>
+                      )}
+                    </span>
+                  )}
+                </span>
+              </button>
+            </div>
           </div>
         )}
         {/* Скрытые input'ы для файлов и фото */}
