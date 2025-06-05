@@ -1,11 +1,15 @@
 import { PaperclipIcon } from "@/shared/ui/icons/paper-clip-icon"
-import React, { useRef, useState } from "react"
+import React, { useRef, useState, useEffect } from "react"
 import { ChatIcon } from "../chat-icon/chat-icon"
 import { useAppDispatch, useAppSelector } from "@/app/hooks"
 import { getSelectedChatId } from "@/entities/chat/model/chat-selectors"
 import { getToken } from "@/features/auth/model/auth-selectors"
 import { useSendFileMessageMutation } from "@/entities/message/api/message-api"
 import { ChatEmojiPicker } from "../chat-emoji-picker/chat-emoji-picker"
+import { Spinner } from "@/shared/ui/spiner/spiner"
+import { getBestLocation } from "@/shared/lib/helpers/get-best-location"
+
+
 
 export const ChatSendForm = ({
   iconColor = "text-primary",
@@ -19,12 +23,30 @@ export const ChatSendForm = ({
   const [message, setMessage] = useState("")
   const [menuOpen, setMenuOpen] = useState(false)
   const [showEmoji, setShowEmoji] = useState(false)
+  const [locating, setLocating] = useState(false)
+  const [locCountdown, setLocCountdown] = useState(8)
+  const [locAccuracy, setLocAccuracy] = useState<number | null>(null)
+  const locationCancelRef = useRef<(() => void) | null>(null)
   const inputRef = useRef<HTMLInputElement>(null)
   const photoInputRef = useRef<HTMLInputElement>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
-
   const [sendFileMessage, { isLoading: isFileLoading }] =
     useSendFileMessageMutation()
+
+  useEffect(() => {
+    if (!locating) return
+    setLocCountdown(8)
+    const interval = setInterval(() => {
+      setLocCountdown(prev => {
+        if (prev <= 1) {
+          clearInterval(interval)
+          return 0
+        }
+        return prev - 1
+      })
+    }, 1000)
+    return () => clearInterval(interval)
+  }, [locating])
 
   // Открытие input'а для фото
   const handlePhotoClick = () => {
@@ -89,6 +111,7 @@ export const ChatSendForm = ({
     inputRef.current?.focus()
   }
 
+  // Оптимизированная отправка локации
   const handleSendLocation = () => {
     if (!chatId || !token) return
 
@@ -97,10 +120,13 @@ export const ChatSendForm = ({
       return
     }
 
-    navigator.geolocation.getCurrentPosition(
+    setLocating(true)
+    setLocAccuracy(null)
+    locationCancelRef.current = getBestLocation(
       position => {
+        setLocating(false)
+        setLocAccuracy(null)
         const { latitude, longitude } = position.coords
-        // Шлем, например, как "[location]55.7558,37.6173"
         dispatch({
           type: "chat/sendMessage",
           payload: {
@@ -111,10 +137,22 @@ export const ChatSendForm = ({
         setMenuOpen(false)
       },
       error => {
+        setLocating(false)
+        setLocAccuracy(null)
         alert("Не удалось получить локацию: " + error.message)
         setMenuOpen(false)
       },
+      40, // min accuracy (метров)
+      8000, // max wait (мс)
+      acc => setLocAccuracy(acc),
     )
+  }
+
+  // Отмена поиска локации
+  const handleCancelLocation = () => {
+    locationCancelRef.current?.()
+    setLocating(false)
+    setLocAccuracy(null)
   }
 
   return (
@@ -143,7 +181,7 @@ export const ChatSendForm = ({
             aria-label="Добавить ресурс"
             onClick={() => {
               setMenuOpen(v => !v)
-              setShowEmoji(false) // при открытии меню ресурсов закрываем эмодзи
+              setShowEmoji(false)
             }}
             onBlur={() => setTimeout(() => setMenuOpen(false), 150)}
           >
@@ -151,7 +189,7 @@ export const ChatSendForm = ({
           </div>
         </button>
         {menuOpen && (
-          <div className="absolute bottom-12 left-0 z-20 w-48 bg-base-100 border border-base-300 shadow-lg rounded-xl p-2 flex flex-col">
+          <div className="absolute bottom-12 left-0 z-20 w-56 bg-base-100 border border-base-300 shadow-lg rounded-xl p-2 flex flex-col">
             <button
               type="button"
               className="flex items-center cursor-pointer px-3 py-2 rounded-lg hover:bg-base-200 mb-2"
@@ -172,15 +210,42 @@ export const ChatSendForm = ({
             </button>
             <button
               type="button"
-              className="flex items-center px-3 py-2 rounded-lg hover:bg-base-200 cursor-pointer"
+              className="flex items-center px-3 py-2 rounded-lg hover:bg-base-200 cursor-pointer relative"
               onClick={handleSendLocation}
-              disabled={isFileLoading}
+              disabled={isFileLoading || locating}
             >
               <ChatIcon
                 type="location"
                 className={`w-6 h-6 mr-3 ${iconColor}`}
               />
-              <span className="text-base-content">Локация</span>
+              <span className="text-base-content flex items-center">
+                Локация
+                {locating && (
+                  <span className="ml-2 flex items-center animate-fade-in">
+                    <Spinner />
+                    <span className="ml-1 text-xs text-base-content/80 tabular-nums select-none">
+                      {locCountdown}s
+                    </span>
+                    {locAccuracy !== null && (
+                      <span className="ml-1 text-xs text-base-content/60 select-none">
+                        {Math.round(locAccuracy)}м
+                      </span>
+                    )}
+                    <button
+                      type="button"
+                      title="Отмена"
+                      onClick={e => {
+                        e.stopPropagation()
+                        handleCancelLocation()
+                      }}
+                      className="ml-2 w-6 h-6 flex items-center justify-center rounded-full text-lg text-error bg-base-200 hover:bg-error/10 transition-colors focus:outline-none border border-transparent hover:border-error"
+                      style={{ lineHeight: 1 }}
+                    >
+                      ×
+                    </button>
+                  </span>
+                )}
+              </span>
             </button>
           </div>
         )}
@@ -208,7 +273,7 @@ export const ChatSendForm = ({
           aria-label="Эмодзи"
           onClick={() => {
             setShowEmoji(v => !v)
-            setMenuOpen(false) // при открытии эмодзи закрываем меню ресурсов
+            setMenuOpen(false)
           }}
           onBlur={() => setTimeout(() => setShowEmoji(false), 150)}
           tabIndex={0}
