@@ -73,7 +73,7 @@ export const ChatCard: FC<{ chat: TChat; isActive: boolean }> = ({
               {chat.name}
             </h6>
           </div>
-          {user?.userType.typeName === EUserType.Admin && (
+          {user?.userType.typeName === EUserType.Admin && chat.chatId !== 1 && (
             <div
               className="tooltip tooltip-left tooltip-warning flex items-center"
               data-tip="Удалить чат"
