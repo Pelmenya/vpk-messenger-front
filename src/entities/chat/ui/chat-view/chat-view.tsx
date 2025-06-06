@@ -20,6 +20,7 @@ import { useGetOtherUsersQuery } from "@/entities/user/api/user-api"
 import { ChatUsersSelect } from "../chat-users-select/chat-users-select"
 import { getUser } from "@/entities/user/model/user-selectors"
 import { EUserType } from "@/entities/user/model/user.entity"
+import { toast } from "react-toastify"
 
 export const ChatView: FC = () => {
   const { chatId } = useParams<{ chatId: string }>()
@@ -104,8 +105,10 @@ export const ChatView: FC = () => {
       await refetchChats()
       await refetchMessages()
       setIsOpenUserModal(false)
-    } catch {
+      toast.success("Участники чата сохранены!") // уведомление об успехе
+    } catch (e: any) {
       setSaveError("Ошибка при сохранении участников!")
+      toast.error(e?.data?.message || "Ошибка при сохранении участников!") // уведомление об ошибке
     }
   }
 

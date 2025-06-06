@@ -9,6 +9,7 @@ import { setUserAvatar } from "../../model/user-slice"
 import { EMPTY_PIC_PLACEHOLDER } from "@/shared/lib/constants/empty-pic-placeholder"
 import { getAvatarBg } from "@/shared/lib/helpers/get-avatar-bg"
 import { TNullable } from "@/shared/types/t-nullable"
+import { toast } from "react-toastify"
 
 export const Avatar: FC = () => {
   const user = useAppSelector(getUser)
@@ -25,9 +26,7 @@ export const Avatar: FC = () => {
   // Сброс preview при открытии модалки
   useEffect(() => {
     if (isOpen) {
-      
       if (user?.profileImageUrl) {
-        console.log(user?.profileImageUrl)
         setPreview(setBaseImageUrl(user?.profileImageUrl))
       }
       setFile(null)
@@ -63,7 +62,10 @@ export const Avatar: FC = () => {
 
     const authKey = token
 
-    if (!authKey) return
+    if (!authKey) {
+      toast.error("Нет авторизации для загрузки аватара")
+      return
+    }
     try {
       const { url } = await putUserAvatar({
         body: formData,
@@ -73,9 +75,9 @@ export const Avatar: FC = () => {
         dispatch(setUserAvatar(url))
       }
       setIsOpen(false)
-    } catch (e) {
-      // обработать ошибку
-      alert("Ошибка загрузки аватара")
+      toast.success("Аватар успешно обновлён!") // уведомление об успехе
+    } catch (e: any) {
+      toast.error(e?.data?.message || "Ошибка загрузки аватара") // уведомление об ошибке
     }
   }
 
