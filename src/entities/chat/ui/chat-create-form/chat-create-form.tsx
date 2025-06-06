@@ -10,6 +10,7 @@ import { usePostChatMutation, usePutChatByIdMutation } from "../../api/chat-api"
 import { TChatCreateDto } from "../../model/types/t-chat-create.dto"
 import { schemaChatCreate } from "../../model/schemas/schema-chat-create"
 import { getUser } from "@/entities/user/model/user-selectors"
+import { toast } from "react-toastify" // <---- Добавим импорт
 
 export const ChatCreateForm: FC<{ onSuccess?: () => void }> = ({
   onSuccess,
@@ -50,9 +51,12 @@ export const ChatCreateForm: FC<{ onSuccess?: () => void }> = ({
         authKey: token!,
       })
       reset()
+      toast.success("Чат успешно создан!") // <--- Уведомление об успехе
       onSuccess?.()
     } catch (e: any) {
-      setResError(e?.data?.message || "Ошибка создания чата")
+      const errorMessage = e?.data?.message || "Ошибка создания чата"
+      setResError(errorMessage)
+      toast.error(errorMessage) // <--- Уведомление об ошибке
     }
   }
 

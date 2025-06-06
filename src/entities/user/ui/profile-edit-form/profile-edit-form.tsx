@@ -13,6 +13,7 @@ import { FormWithTitle } from "@/shared/ui/form-with-title/form-with-title"
 import { InputField } from "@/shared/ui/input-field/input-field"
 import { TNullable } from "@/shared/types/t-nullable"
 import { getToken } from "@/features/auth/model/auth-selectors"
+import { toast } from "react-toastify" // <--- Добавляем импорт
 
 export const ProfileEditForm = () => {
   const dispatch = useAppDispatch()
@@ -53,6 +54,7 @@ export const ProfileEditForm = () => {
         setValue("birthDate", data.birthDate ? data.birthDate.slice(0, 10) : null)
       } catch {
         setResError("Не удалось загрузить профиль")
+        toast.error("Не удалось загрузить профиль") // <-- Уведомление при ошибке загрузки
       }
     }
     fetchProfile()
@@ -62,6 +64,7 @@ export const ProfileEditForm = () => {
     setResError(null)
     if (!token) {
       setResError("Нет авторизации")
+      toast.error("Нет авторизации") // <-- Уведомление при отсутствии авторизации
       return
     }
     try {
@@ -69,8 +72,11 @@ export const ProfileEditForm = () => {
       // После успешного обновления профиля — получаем свежую версию профиля
       const actualUser = await fetchUserMe({ authKey: token }).unwrap()
       dispatch(setUser(actualUser))
+      toast.success("Профиль успешно обновлен!") // <-- Уведомление об успехе
     } catch (error: any) {
-      setResError(error?.data?.message || "Ошибка при сохранении")
+      const errorMessage = error?.data?.message || "Ошибка при сохранении"
+      setResError(errorMessage)
+      toast.error(errorMessage) // <-- Уведомление об ошибке
     }
   }
 

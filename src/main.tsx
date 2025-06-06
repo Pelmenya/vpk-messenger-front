@@ -4,7 +4,7 @@ import ReactDOM from "react-dom/client"
 import { Provider } from "react-redux"
 import { store } from "./app/store/store"
 import { BrowserRouter } from "react-router-dom"
-
+import { ToastContainer } from "react-toastify"
 import "./index.css"
 import { App } from "./app/app"
 
@@ -16,10 +16,22 @@ if (container) {
   root.render(
     <React.StrictMode>
       <Provider store={store}>
-          <BrowserRouter>
-            <App />
-          </BrowserRouter>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
       </Provider>
+      <ToastContainer
+        position="bottom-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+      />
     </React.StrictMode>,
   )
 } else {

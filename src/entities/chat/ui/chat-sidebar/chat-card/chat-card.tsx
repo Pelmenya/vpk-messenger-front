@@ -15,13 +15,14 @@ import { Link, useNavigate } from "react-router-dom"
 import { getSelectedChatId } from "@/entities/chat/model/chat-selectors"
 import { getUser } from "@/entities/user/model/user-selectors"
 import { EUserType } from "@/entities/user/model/user.entity"
+import { toast } from "react-toastify"
 
 export const ChatCard: FC<{ chat: TChat; isActive: boolean }> = ({
   chat,
   isActive,
 }) => {
   const dispatch = useAppDispatch()
-  const navigate = useNavigate();
+  const navigate = useNavigate()
   const [confirmOpen, setConfirmOpen] = useState(false)
   const [error, setError] = useState<string>("")
   const [deleteChat, { isLoading }] = useDeleteChatByIdMutation()
@@ -35,21 +36,23 @@ export const ChatCard: FC<{ chat: TChat; isActive: boolean }> = ({
     setError("")
     try {
       await deleteChat({ chatId: chat.chatId, authKey: token || "" }).unwrap()
+      toast.success("Чат удалён") // уведомление об успехе
       setConfirmOpen(false)
       await refetchChats()
       // сбрасываем выбранный чат, если удалили его
       if (selectedChatId === chat.chatId) {
         dispatch(setSelectedChatId(null))
-        navigate('/chats')
+        navigate("/chats")
       } else {
         dispatch(setSelectedChatId(selectedChatId))
       }
     } catch (e: any) {
-      setError(
+      const errorMsg =
         e?.data?.message ||
-          e?.message ||
-          "Не удалось удалить чат. Попробуйте ещё раз.",
-      )
+        e?.message ||
+        "Не удалось удалить чат. Попробуйте ещё раз."
+      setError(errorMsg)
+      toast.error(errorMsg) // уведомление об ошибке
     }
   }
 
