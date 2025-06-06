@@ -1,4 +1,6 @@
 @import './app/fonts/fonts.css';
+@import "./shared/ui/toastify/toastify.css";
+
 @import "tailwindcss";
 
 @theme {
